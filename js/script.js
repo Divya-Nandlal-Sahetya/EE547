@@ -25,7 +25,7 @@ const config = require(mongo_file_path);
   await connection.connect();
   db = connection.db(database);
 
-  const typeDefs = fs.readFileSync("schema-v2.graphql").toString("utf-8");
+  const typeDefs = fs.readFileSync("schema.graphql").toString("utf-8");
 
   function checkValidJSON(file_path) {
     try {
@@ -58,8 +58,9 @@ const config = require(mongo_file_path);
         context: {
           db: db,
           loaders: {
-            semesters: new DataLoader((keys) => getSemesters(db, keys)),
-            subjects: new DataLoader((keys) => getSubjects(db, keys)),
+            person: new DataLoader((keys) => getPersons(db, keys)),
+            subject: new DataLoader((keys) => getSubjects(db, keys)),
+            gradebook: new DataLoader((keys) => getGradebook(db, keys)),
           },
         },
       };
@@ -76,94 +77,171 @@ const config = require(mongo_file_path);
   }
 })();
 
-
-//GET TEACHERS
-async function getTeachers(db, keys) {
-   const teachers = await db.collection("teachers").find().toArray();
-   return keys.map((key) => teachers.find((teacher) => teacher._id == key));
+//GET PERSONS
+async function getPersons(db, keys) {
+  keys = keys.map((key) => ObjectId(key));
+  let persons = await db
+    .collection("person")
+    .find({ _id: { $in: keys } })
+    .toArray();
+  return (
+    formatPerson(persons) ||
+    new Error((message = `persons collection does not exist `))
+  );
 }
 
-//GET STUDENTS
-async function getStudents(db, keys) {
-   const students = await db.collection("students").find().toArray();
-   return keys.map((key) => students.find((student) => student._id == key));
+
+//GET SUBJECTS
+async function getSubjects(db, keys) {
+  keys = keys.map((key) => ObjectId(key));
+  let subjects = await db
+    .collection("subject")
+    .find({ _id: { $in: keys } })
+    .toArray();
+  return (
+    formatSubject(subjects) ||
+    new Error((message = `subjects collection does not exist `))
+  );
 }
 
-// //GET SEMESTERS
-// async function getSemesters(db, keys) {
-//   keys = keys.map((key) => ObjectId(key));
-//   let semesters = await db
-//     .collection("semester")
-//     .find({ _id: { $in: keys } })
-//     .toArray();
-//   return (
-//    semesters.map(formatSemester) ||
-//     new Error((message = `semesters collection does not exist `))
-//   );
-// }
-
-// //GET SUBJECTS
-// async function getSubjects(db, keys) {
-//   keys = keys.map((key) => ObjectId(key));
-//   let subjects = await db
-//     .collection("subject")
-//     .find({ _id: { $in: keys } })
-//     .toArray();
-//   return (
-//     formatStudent(subjects) ||
-//     new Error((message = `subjects collection does not exist `))
-//   );
-// }
-
+//GET GRADEBOOK
+async function getGradebook(db, keys) {
+  keys = keys.map((key) => ObjectId(key));
+  let gradebook = await db
+    .collection("gradebook")
+    .find({ stid: { $in: keys } })
+    .toArray();
+  return (
+    formatGradebook(gradebook) ||
+    new Error((message = `gradebook collection does not exist `))
+  );
+}
 
 ("use strict");
 
 const resolvers = {
   Mutation: {
-    teacherCreate: async (_, { playerInput }, context) => {
-      let teacher = {
-        fname: playerInput.fname,
-        lname: playerInput.lname,
-        handed: enum_handed[playerInput.handed],
-        balance_usd_cents: playerInput.initial_balance_usd_cents,
-        is_active: false,
-        num_join: 0,
-        num_won: 0,
-        num_dq: 0,
-        total_points: 0,
-        total_prize_usd_cents: 0,
-        efficiency: 0,
-        in_active_match: false,
+
+    personCreate: async (_, { personInput }, context) => {
+      let person = {
+        fname: personInput.fname,
+        lname: personInput.lname,
+        role: enum_role[personInput.role],
+        is_active: personInput.is_active ? personInput.is_active:true,
+        gpa: personInput.gpa?personInput.gpa:null,
       };
-      let res = await context.db.collection("teacher").insertOne(teacher);
-      return context.loaders.teacher.load(res.insertedId);
+      let res = await context.db.collection("person").insertOne(person);
+      return context.loaders.person.load(res.insertedId)  ;
     },
-    //Student Create
-    studentCreate: async (_, { playerInput }, context) => {
-      let teacher = {
-        fname: playerInput.fname,
-        lname: playerInput.lname,
-        handed: enum_handed[playerInput.handed],
-        balance_usd_cents: playerInput.initial_balance_usd_cents,
-        is_active: false,
-        num_join: 0,
-        num_won: 0,
-        num_dq: 0,
-        total_points: 0,
-        total_prize_usd_cents: 0,
-        efficiency: 0,
-        in_active_match: false,
+
+    personDelete: async (_, { id }, context) => {
+      let res = await context.db.collection("person").deleteOne({ _id: ObjectId(id) });
+      if (res.deletedCount > 0) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+
+    personUpdate: async (_, { id, personInput }, context) => {
+      let updated_dict = {}
+      if(personInput.lname!=null){
+        updated_dict["lname"] = personInput.lname
+    }
+    if(personInput.is_active!=null){
+        updated_dict["is_active"] = personInput.is_active;
+    }
+    if(personInput.gpa!=null){
+        updated_dict["gpa"] = personInput.gpa;
+    }
+
+      let res = await context.db.collection("person").updateOne(
+        { _id: ObjectId(id) },
+        {
+          $set:   updated_dict
+        }
+      )
+      context.loaders.person.clear(id);
+      return context.loaders.person.load(id);
+    },
+
+    subjectCreate: async (_, { subjectInput }, context) => {
+      let subject = {
+        name: subjectInput.name,
+        code: subjectInput.code,
+        is_active: subjectInput.is_active? subjectInput.is_active:true,
       };
-      let res = await context.db.collection("teacher").insertOne(teacher);
-      return context.loaders.teacher.load(res.insertedId);
+      let res = await context.db.collection("subject").insertOne(subject);
+      return context.loaders.subject.load(res.insertedId);
     },
+
+    subjectDelete: async (_, { id }, context) => {
+      let res = await context.db.collection("subject").deleteOne({ _id: ObjectId(id) });
+      if (res.deletedCount > 0) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+
+    subjectUpdate: async (_, { id, subjectInput }, context) => {
+      let updated_dict = {}
+      if(subjectInput.name!=null){
+        updated_dict["name"] = subjectInput.name
+    }
+    if(subjectInput.is_active!=null){
+        updated_dict["is_active"] = subjectInput.is_active;
+    }
+      let res = await context.db.collection("subject").updateOne(
+        { _id: ObjectId(id) },
+        {
+          $set:   updated_dict
+        }
+      )
+      context.loaders.subject.clear(id);
+      return context.loaders.subject.load(id);
+    },
+
+    gradebookCreate: async (_, { gradebookInput }, context) => {
+      let gradebook = {
+        stid: ObjectId(gradebookInput.stid),
+        subid: ObjectId(gradebookInput.subid),
+        grade: gradebookInput.grade,
+      };
+      let res = await context.db.collection("gradebook").insertOne(gradebook);
+      return context.loaders.gradebook.load(res.insertedId);
+    }
   },
+
+
   Query: {
-    teacher: (_, { tid }, context) => {
-      return context.loaders.teacher.load(tid);
+    person: (_, { pid }, context) => {
+      return context.loaders.person.load(pid);
     },
+
+    persons: async (_, { limit = 20, offset = 0, sort = null }, context) => {
+      let persons = await context.db.collection("person").find().toArray();
+      if (persons == null) return null;
+      if (sort != null) {
+        persons.sort((a, b) => {
+          if (a[sort] < b[sort]) {
+            return -1;
+          }
+          if (a[sort] > b[sort]) {
+            return 1;
+          }
+          return 0;
+        });
+      }
+      return persons.slice(offset, offset + limit).map(formatPerson);
+    },
+
+    teacher: (_, { id }, context) => {
+      return context.loaders.person.load(id);
+    },
+
     teachers: async (_, { limit = 20, offset = 0, sort = null }, context) => {
-      let teachers = await context.db.collection("teacher").find().toArray();
+      let teachers = await context.db.collection("person").find({ role: "T" }).toArray();
       if (teachers == null) return null;
       if (sort != null) {
         teachers.sort((a, b) => {
@@ -176,58 +254,93 @@ const resolvers = {
           return 0;
         });
       }
-      return teachers.slice(offset, offset + limit).map(formatTeacher);
+      return teachers.slice(offset, offset + limit).map(formatPerson);
     },
-    student: (_, { sid }, context) => {
-      return context.loaders.student.load(sid);
+
+
+    student: (_, { id }, context) => {
+      return context.loaders.person.load(id);
     },
+
     students: async (_, { limit = 20, offset = 0, sort = null }, context) => {
-      return result.slice(offset, offset + limit);
-    },
-    teacher: {
-      userId: ({ user_id }, _, context) => {
-        return user_id;
-      },
+      let students = await context.db.collection("person").find({ role: "S" }).toArray();
+      if (students == null) return null;
+      if (sort != null) {
+        students.sort((a, b) => {
+          if (a[sort] < b[sort]) {
+            return -1;
+          }
+          if (a[sort] > b[sort]) {
+            return 1;
+          }
+          return 0;
+        });
+      }
+      return students.slice(offset, offset + limit).map(formatPerson);
     },
   },
 };
 
-
-//FORMAT TEACHER
-function formatTeacher(teacher) {
-  if (teacher == null) return null;
-  if (Array.isArray(teacher)) {
-    return teacher.map(formatTeacher);
+//FORMAT PERSON
+function formatPerson(person) {
+  if (person == null) return null;
+  if (Array.isArray(person)) {
+    return person.map(formatPerson);
   }
 
   let res = {
-    tid: teacher._id,
+    pid: person._id,
+    fname: person.fname,
+    lname: person.lname,
+    name: person.fname + " " + person.lname,
+    role: rev_enum_role[person.role],
+    is_active: person.is_active,
+    gpa: person.gpa?person.gpa:null,
   };
   return res;
 }
 
-//FORMAT STUDENT
-// function formatStudent(student) {
-//   if (student == null) return null;
-//   if (Array.isArray(student)) {
-//     return Promise.all(student.map(formatStudent));
-//   } else {
-//     let res = Promise.all([
-//       db
-//         .collection("teacher")
-//         .find({ _id: ObjectId(student.s1_id) })
-//         .toArray(),
-//       db
-//         .collection("teacher")
-//         .find({ _id: ObjectId(student.s2_id) })
-//         .toArray(),
-//     ]).then((teachers) => {
-//       teachers = formatTeacher(teachers);
-//       res = {
-//         sid: student._id,
-//       };
-//       return res;
-//     });
-//     return res;
-//   }
-// }
+//FORMAT SUBJECT
+function formatSubject(subject) {
+  if (subject == null) return null;
+  if (Array.isArray(subject)) {
+    return subject.map(formatSubject);
+  }
+
+  let res = {
+    sid: subject._id,
+    name: subject.name,
+    code: subject.code,
+    is_active: subject.is_active,
+  };
+  return res;
+}
+
+//FORMAT GRADEBOOK
+function formatGradebook(gradebook) {
+  if (gradebook == null) return null;
+  if (Array.isArray(gradebook)) {
+    return gradebook.map(formatGradebook);
+  }
+
+  let res = {
+    gid: gradebook._id,
+    stid: gradebook.stid,
+    subject_code: gradebook.subject_code,
+    grade: gradebook.grade,
+  };
+  return res;
+}
+
+//ENUM FOR ROLE
+const enum_role = {
+  teacher: "T",
+  student: "S",
+  admin: "A",
+};
+
+const rev_enum_role = {
+  T: "teacher",
+  S: "student",
+  A: "admin",
+};
