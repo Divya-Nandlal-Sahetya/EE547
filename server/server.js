@@ -11,7 +11,7 @@ const { MongoClient, ObjectId } = require("mongodb");
 const app = express();
 const node_port = 3000;
 
-let mongo_file_path = "/home/kd/Documents/USC/EE547/Project/EE547/js/config/mongo.json";
+let mongo_file_path = "/home/kd/Documents/USC/EE547/Project/EE547/server/config/mongo.json";
 const config = require(mongo_file_path);
 
 (async function () {
@@ -25,7 +25,7 @@ const config = require(mongo_file_path);
   await connection.connect();
   db = connection.db(database);
 
-  const typeDefs = fs.readFileSync("schema.graphql").toString("utf-8");
+  const typeDefs = fs.readFileSync("/home/kd/Documents/USC/EE547/Project/EE547/server/schema.graphql").toString("utf-8");
 
   function checkValidJSON(file_path) {
     try {
@@ -52,9 +52,10 @@ const config = require(mongo_file_path);
   app.use(
     "/graphql",
     graphqlHTTP(async (req) => {
+      console.log("req", req);
       return {
         schema,
-        graphiql: true,
+        graphiql: false,
         context: {
           db: db,
           loaders: {
@@ -109,7 +110,7 @@ async function getGradebook(db, keys) {
   keys = keys.map((key) => ObjectId(key));
   let gradebook = await db
     .collection("gradebook")
-    .find({ stid: { $in: keys } })
+    .find({ _id: { $in: keys } })
     .toArray();
   return (
     formatGradebook(gradebook) ||
@@ -204,15 +205,44 @@ const resolvers = {
 
     gradebookCreate: async (_, { gradebookInput }, context) => {
       let gradebook = {
-        stid: ObjectId(gradebookInput.stid),
-        subid: ObjectId(gradebookInput.subid),
+        student_id: ObjectId(gradebookInput.student_id),
+        subject_code: gradebookInput.subject_code,
         grade: gradebookInput.grade,
+        GPA: gradebookInput.GPA,
+
       };
       let res = await context.db.collection("gradebook").insertOne(gradebook);
+      console.log(res.insertedId);
       return context.loaders.gradebook.load(res.insertedId);
-    }
-  },
+    },
 
+    gradebookDelete: async (_, { id }, context) => {
+      let res = await context.db.collection("gradebook").deleteOne({ _id: ObjectId(id) });
+      if (res.deletedCount > 0) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+
+    gradebookUpdate: async (_, { id, gradebookInput }, context) => {
+      let updated_dict = {}
+      if(gradebookInput.grade!=null){
+        updated_dict["grade"] = gradebookInput.grade
+    }
+    if(gradebookInput.GPA!=null){
+        updated_dict["GPA"] = gradebookInput.GPA;
+    }
+      let res = await context.db.collection("gradebook").updateOne(
+        { _id: ObjectId(id) },
+        {
+          $set:   updated_dict
+        }
+      )
+      context.loaders.gradebook.clear(id);
+      return context.loaders.gradebook.load(id);
+  }
+},
 
   Query: {
     person: (_, { pid }, context) => {
@@ -278,6 +308,49 @@ const resolvers = {
       }
       return students.slice(offset, offset + limit).map(formatPerson);
     },
+
+    subject: (_, { id }, context) => {
+      return context.loaders.subject.load(id);
+    },
+
+    subjects: async (_, { limit = 20, offset = 0, sort = null }, context) => {
+      let subjects = await context.db.collection("subject").find().toArray();
+      if (subjects == null) return null;
+      if (sort != null) {
+        subjects.sort((a, b) => {
+          if (a[sort] < b[sort]) {
+            return -1;
+          }
+          if (a[sort] > b[sort]) {
+            return 1;
+          }
+          return 0;
+        });
+      }
+      return subjects.slice(offset, offset + limit).map(formatSubject);
+    },
+
+    gradebook: (_, { id }, context) => {
+      return context.loaders.gradebook.load(id);
+    },
+
+    gradebooks: async (_, { limit = 20, offset = 0, sort = null }, context) => {
+      let gradebooks = await context.db.collection("gradebook").find().toArray();
+      if (gradebooks == null) return null;
+      if (sort != null) {
+        gradebooks.sort((a, b) => {
+          if (a[sort] < b[sort]) {
+            return -1;
+          }
+          if (a[sort] > b[sort]) {
+            return 1;
+          }
+          return 0;
+        });
+      }
+      return gradebooks.slice(offset, offset + limit).map(formatGradebook);
+    }
+
   },
 };
 
@@ -292,7 +365,7 @@ function formatPerson(person) {
     pid: person._id,
     fname: person.fname,
     lname: person.lname,
-    name: person.fname + " " + person.lname,
+    name: `${person.fname}${person.lname ? ` ${person.lname}` : ""}`,
     role: rev_enum_role[person.role],
     is_active: person.is_active,
     gpa: person.gpa?person.gpa:null,
@@ -324,10 +397,11 @@ function formatGradebook(gradebook) {
   }
 
   let res = {
-    gid: gradebook._id,
-    stid: gradebook.stid,
+    id: gradebook._id,
+    student_id: gradebook.student_id,
     subject_code: gradebook.subject_code,
     grade: gradebook.grade,
+    GPA: gradebook.GPA,
   };
   return res;
 }
