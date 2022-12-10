@@ -34,14 +34,14 @@ input personCreateInput {
   fname: String!
   lname: String
   role: roleEnum
-  GPA: Float
+  gpa: Float
 }
 
 input personUpdateInput {
   fname: String
   lname: String
   is_active: Boolean
-  GPA: Float
+  gpa: Float
 }
 
 type Person {
@@ -51,7 +51,7 @@ type Person {
   name: String
   id: ID!
   role: roleEnum
-  GPA: Float
+  gpa: Float
 }
 
 input subjectCreateInput {
@@ -68,14 +68,14 @@ input subjectUpdateInput {
 input gradebookCreateInput {
   subject_code: String
   grade: String
-  GPA: Float
+  gpa: Float
   student_id: ID
 }
 
 input gradebookUpdateInput {
   subject_code: String
   grade: String
-  GPA: Float
+  gpa: Float
 }
 
 type Subject {
@@ -89,6 +89,6 @@ type gradebook {
   id: ID!
   subject_code: String
   grade: String
-  GPA: Float
+  gpa: Float
   student_id: ID
 }

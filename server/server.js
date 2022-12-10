@@ -52,10 +52,10 @@ const config = require(mongo_file_path);
   app.use(
     "/graphql",
     graphqlHTTP(async (req) => {
-      console.log("req", req);
+      console.log("req");
       return {
         schema,
-        graphiql: false,
+        graphiql: true,
         context: {
           db: db,
           loaders: {
@@ -208,7 +208,7 @@ const resolvers = {
         student_id: ObjectId(gradebookInput.student_id),
         subject_code: gradebookInput.subject_code,
         grade: gradebookInput.grade,
-        GPA: gradebookInput.GPA,
+        gpa: gradebookInput.gpa,
 
       };
       let res = await context.db.collection("gradebook").insertOne(gradebook);
@@ -230,8 +230,8 @@ const resolvers = {
       if(gradebookInput.grade!=null){
         updated_dict["grade"] = gradebookInput.grade
     }
-    if(gradebookInput.GPA!=null){
-        updated_dict["GPA"] = gradebookInput.GPA;
+    if(gradebookInput.gpa!=null){
+        updated_dict["gpa"] = gradebookInput.gpa;
     }
       let res = await context.db.collection("gradebook").updateOne(
         { _id: ObjectId(id) },
@@ -401,7 +401,7 @@ function formatGradebook(gradebook) {
     student_id: gradebook.student_id,
     subject_code: gradebook.subject_code,
     grade: gradebook.grade,
-    GPA: gradebook.GPA,
+    gpa: gradebook.gpa,
   };
   return res;
 }

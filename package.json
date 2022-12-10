@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "@fontsource/open-sans": "^4.5.13",
+    "graphql": "^16.6.0",
+    "urql": "^3.0.3"
+  }
+}

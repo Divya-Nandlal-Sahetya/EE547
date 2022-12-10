@@ -1,0 +1,223 @@
+/***    Login Page     ***/
+form {
+    background-image: url("http://localhost:3001/uscbg2.jpg") ;
+    background-position: 'center';
+    background-repeat: no-repeat;
+    background-size : 'cover' ;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: 'center';
+    height: 100vh;
+    width: 100vw;
+    border: 1px solid rgb(0, 0, 0);
+    border-radius: 2px;
+    padding: 2rem;
+    margin:auto;
+    margin: 2rem 0 1rem 0
+}
+
+form h2 {
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: rgb(249, 218, 22);
+}
+
+form h3{
+        text-align: center;
+        color: #f1f1f1;
+}
+label{
+    font-size: 1.2rem;
+    font-weight: 300;
+    text-transform: capitalize;
+    margin-bottom: 1rem;
+    display: flex;
+    background-color: black;
+}
+
+
+form label {
+    float: left;
+    font-size: 1rem;
+    font-weight: 400;
+    margin:0 ;
+    padding: auto;
+    color: rgb(247, 212, 37);
+    background-color: rgba(173, 29, 29, 0.681);
+}
+
+form input {
+    width: 15rem;
+    padding: .3rem;
+    background-color: #ffffff;
+    border-radius: 5px;
+    outline: none;
+    border: 1px solid #222;
+}
+.usc-logo{
+    height: 100px;
+    align-items: left;
+    margin: 0 auto;
+    display: flex;
+    margin-bottom: 1rem;
+}
+.right-label {
+    float: right;
+    cursor: pointer
+}
+
+input {
+    width: 100%;
+    padding: .3rem;
+    border-radius: 5px;
+    outline: none;
+    border-radius: 5px;
+    outline: none;
+    border: 1px solid #222;
+}
+
+#password {
+    display: flex;
+    align-items: center;
+    margin-bottom: auto
+}
+
+#sub_btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: .5rem;
+    border: none;
+    background: rgb(226, 221, 221);
+    color: rgb(0, 0, 0);
+    border-radius: 3px;
+}
+
+#sub_btn:hover {
+    background: rgb(243, 188, 5);
+    transition: all .5s
+}
+
+footer p {
+    margin: 0;
+    font-size: .9rem
+}
+
+* {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 600;
+    align-self: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    }
+
+footer{
+    display: flex;
+    align-items: auto;
+    justify-content: right;
+    margin: 1rem;
+    color: #000000;
+}
+
+h1{
+   display: flex;
+    align-items: center;
+    justify-content: center; 
+    text-align: center;
+}
+
+h3{
+    display: flex;
+    align-items: center;
+    justify-content: right; 
+    text-align: center;
+    margin: 1rem;
+    color: #000000;
+}
+
+body {
+    margin: 0 auto
+}
+
+.m-5-auto {
+    margin: 5rem auto
+}
+
+.primary-button {
+    margin-top: 5rem;
+    margin-right: 1rem;
+    padding: .6rem;
+    width: 10rem;
+    background: #222;
+    border: none;
+    color: #fff;
+    font-size: 1.2rem;
+    transition: all .5s;
+    cursor: pointer;
+    text-transform: capitalize;
+justify-content: right;
+}
+
+/***    Landing Page     ***/
+.main-title,
+.main-para {
+    color: #f1f1f1
+}
+
+.main-title {
+    padding-top: 10rem;
+    font-size: 5rem;
+    text-transform: uppercase
+}
+
+.main-para {
+    font-size: 2.5rem;
+    text-Transform: capitalize
+}
+
+#reg_btn span {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    transition: 0.5s;
+}
+
+#reg_btn span:after {
+    content: '\00bb';
+    position: absolute;
+    opacity: 0;
+    top: 0;
+    right: -20px;
+    transition: 0.5s;
+}
+
+#reg_btn:hover span {
+  padding-right: 25px;
+}
+
+#reg_btn:hover span:after {
+  opacity: 1;
+  right: 0;
+}
+
+
+
+/***    Register Page     ***/
+#checkbox {
+    width: 1rem
+}
+
+form span {
+    font-size: .8rem
+}
+
+#reset_pass_lbl {
+    float: left
+}
+
+/***    Home Page     ***/
+.home-page-title {
+    color: #222
+}
