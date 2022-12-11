@@ -1,12 +1,21 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import {getMyGmailList} from "./gmailApi";
+import {Event} from  "./event";
+import { GetEvents } from './listeventApi';
+import { CreateEvent } from "./createeventApi";
+import { setTokens } from "./tokens";
+import Calendar from 'react-calendar'
+import 'react-calendar/dist/Calendar.css';
 import { Link } from "react-router-dom";
 import {ApolloClient,InMemoryCache,ApolloProvider,HttpLink,from} from '@apollo/client';
 import {onError} from "@apollo/client/link/error"
-import Form from "./Form.js";
+// import Form from "./Form.js";
 import GetStudents from "./GetStudents.js";
 
 
-const errorLink = onError(({graphqlErrors, networkError}) => {
+function GoogleAPI() {
+
+  const errorLink = onError(({graphqlErrors, networkError}) => {
     if (graphqlErrors) {
       graphqlErrors.map(({message, location, path}) => {
         alert(`Graphql error ${message}`)
@@ -16,7 +25,7 @@ const errorLink = onError(({graphqlErrors, networkError}) => {
 
 const link = from([
     errorLink,
-    new HttpLink({uri: "/graphql/"})
+    new HttpLink({uri: "http://localhost:8080/graphql"})
   ])
 
 
@@ -25,20 +34,105 @@ const client = new ApolloClient({
     link: link,
   });
 
-export default function Dashboard() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [eventChanged, setEventChanged] = useState(false)
+  const [selectedDate, setSelectedDate] = useState(new Date())
+  const [isGmailEnabled, setIsGmailEnabled] = useState([false]);
+
+    useEffect(() => {
+    handleTokenFromQueryParams();
+    }, []);
+
+    const [mails, setMails] = useState([]);
+  
+    const createGoogleAuthLink = async () => {
+      try {
+        const request = await fetch("http://localhost:8080/createAuthLink", {
+          method: "POST",
+        });
+        const response = await request.json();
+        window.location.href = response.url;
+      } catch (error) {
+        console.log("App.js 12 | error", error);
+        throw new Error("Issue with Login", error.message);
+      }
+    };
+  
+    const enableGmail = async () => {
+      setIsGmailEnabled(true);
+      // setMails(getMyGmailList());
+    };
+  
+    const handleTokenFromQueryParams = () => {
+      const query = new URLSearchParams(window.location.search);
+      const accessToken = query.get("accessToken");
+      const refreshToken = query.get("refreshToken");
+      const expirationDate = newExpirationDate();
+      console.log("App.js 30 | expiration Date", expirationDate);
+      if (accessToken && refreshToken) {
+        storeTokenData(accessToken, refreshToken, expirationDate);
+        setIsLoggedIn(true);
+      }
+    };
+  
+    const newExpirationDate = () => {
+      var expiration = new Date();
+      expiration.setHours(expiration.getHours() + 1);
+      return expiration;
+    };
+  
+    const storeTokenData = async (token, refreshToken, expirationDate) => {
+      sessionStorage.setItem("accessToken", token);
+      sessionStorage.setItem("refreshToken", refreshToken);
+      sessionStorage.setItem("expirationDate", expirationDate);
+    };
+  
+    const signOut = () => {
+      setIsLoggedIn(false);
+      sessionStorage.clear();
+    };
+  
     return (
-        <div className= 'body'>
-        <ApolloProvider client={client}>
-        <h1>Student Management System</h1>
+      <div >
+        <h1>Google</h1>
+        {!isLoggedIn ? (
+          <button onClick={createGoogleAuthLink}>Login</button>
+        ) : (
+          <div>
+            <h2>Logged In</h2>
+            <button onClick={enableGmail}>gmail list
+            </button>
+            <div>
+      </div>,
+            <button onClick={signOut}>Sign Out</button>
+          </div>
+        )}
+        <div>
+          <Event isLoggedIn={isLoggedIn} isGmailEnabled={isGmailEnabled}/>
+        </div>
+
+        
+      
+
+          <div>
+          <ApolloProvider client={client}>
         <GetStudents/>
         </ApolloProvider>
-        <h1 className="main-title home-page-title">Welcome!</h1>
-            
-            
-            
-            <Link to="/">
-                <button className="primary-button">Log out</button>
-            </Link>
         </div>
-    )
-}
+        <div>
+          
+        <CreateEvent isLoggedIn={isLoggedIn} setEventChanged={setEventChanged} />
+        </div>
+          
+        <Calendar onChange={(prev) => setSelectedDate(prev)} />
+      
+        <div>
+          <GetEvents isLoggedIn={isLoggedIn} selectedDate={selectedDate} eventChanged={eventChanged} setEventChanged={setEventChanged}/>
+        </div>
+
+      </div>
+    );
+  }
+  
+  export default GoogleAPI;
+  

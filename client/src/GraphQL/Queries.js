@@ -2,7 +2,7 @@ import {gql} from '@apollo/client'
 
 export const LOAD_STUDENTS = gql`
 query{
-    students{
+    students(limit:10){
         fname
         lname
         name
@@ -32,7 +32,8 @@ query{
 export const LOAD_STUDENT = gql`
 query($id:ID!){
     student(id:$id){
-    fname
+    name
+    gpa
     }
     }
 `

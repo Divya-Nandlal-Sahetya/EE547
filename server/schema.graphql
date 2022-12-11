@@ -35,6 +35,7 @@ input personCreateInput {
   lname: String
   role: roleEnum
   gpa: Float
+  email: String
 }
 
 input personUpdateInput {
@@ -52,6 +53,7 @@ type Person {
   id: ID!
   role: roleEnum
   gpa: Float
+  email: String
 }
 
 input subjectCreateInput {

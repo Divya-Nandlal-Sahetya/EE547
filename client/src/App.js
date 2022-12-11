@@ -1,7 +1,8 @@
 import "./App.css"
+import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import  Dashboard from "./Components/Dashboard";
-import SignInPage from "./Components/Login";
+import SignInPage from "./Components/SignInPage";
 
   
 function App() {
@@ -9,7 +10,8 @@ function App() {
     <BrowserRouter>
         <div>
             <Routes>
-                <Route path="/" element={<SignInPage/>} /> 
+                <Route path="/" element={<Dashboard/>} />
+                <Route path="/home" element={<SignInPage/>} />
                 <Route path="/dashboard" element={<Dashboard/>} />
             </Routes>
         </div>

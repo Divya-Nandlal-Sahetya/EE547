@@ -9,7 +9,7 @@ const {
 
 const { MongoClient, ObjectId } = require("mongodb");
 const app = express();
-const node_port = 3000;
+const node_port = 8080;
 
 let mongo_file_path = "/home/kd/Documents/USC/EE547/Project/EE547/server/config/mongo.json";
 const config = require(mongo_file_path);
@@ -74,7 +74,7 @@ const config = require(mongo_file_path);
     process.exit(2);
   } else {
     app.listen(node_port);
-    console.log("GraphQL API server running at http://localhost:3000/graphql");
+    console.log("GraphQL API server running at http://localhost:8080/graphql");
   }
 })();
 
@@ -130,6 +130,7 @@ const resolvers = {
         role: enum_role[personInput.role],
         is_active: personInput.is_active ? personInput.is_active:true,
         gpa: personInput.gpa?personInput.gpa:null,
+        email: personInput.email?personInput.email:null,
       };
       let res = await context.db.collection("person").insertOne(person);
       return context.loaders.person.load(res.insertedId)  ;
@@ -369,6 +370,7 @@ function formatPerson(person) {
     role: rev_enum_role[person.role],
     is_active: person.is_active,
     gpa: person.gpa?person.gpa:null,
+    email: person.email,
   };
   return res;
 }
@@ -418,3 +420,88 @@ const rev_enum_role = {
   S: "student",
   A: "admin",
 };
+
+// dotenv
+require("dotenv").config();
+// body parser
+const bodyParser = require("body-parser");
+app.use(bodyParser.json());
+
+//cors
+const cors = require("cors");
+app.use(cors());
+
+// node-fetch
+const fetch = require("node-fetch");
+
+const { google } = require("googleapis");
+
+const oauth2Client = new google.auth.OAuth2(
+  process.env.GOOGLE_CLIENT_ID,
+  process.env.GOOGLE_CLIENT_SECRET,
+  "http://localhost:8080/handleGoogleRedirect" // server redirect url handler
+);
+
+
+app.post("/createAuthLink", cors(), (req, res) => {
+  const url = oauth2Client.generateAuthUrl({
+    access_type: "offline",
+    scope: [
+      "https://www.googleapis.com/auth/userinfo.email",
+      //calendar api scopes]
+      "https://www.googleapis.com/auth/calendar",
+      //gmail
+      "profile",
+      "https://mail.google.com/",
+      //'https://www.googleapis.com/auth/gmail.metadata',
+      "https://www.googleapis.com/auth/gmail.modify",
+      "https://www.googleapis.com/auth/gmail.readonly"
+    ],
+    prompt: "consent",
+  });
+  res.send({ url });
+});
+
+app.get("/handleGoogleRedirect", async (req, res) => {
+  // get code from url
+  const code = req.query.code;
+  console.log("server 36 | code", code);
+  // get access token
+  oauth2Client.getToken(code, (err, tokens) => {
+    if (err) {
+      console.log("server 39 | error", err);
+      throw new Error("Issue with Login", err.message);
+    }
+    const accessToken = tokens.access_token;
+    const refreshToken = tokens.refresh_token;
+    res.redirect(
+      `http://localhost:3000?accessToken=${accessToken}&refreshToken=${refreshToken}`
+    );
+  });
+});
+
+app.post("/getValidToken", async (req, res) => {
+  try {
+    const request = await fetch("https://www.googleapis.com/oauth2/v4/token", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        client_id: process.env.GOOGLE_CLIENT_ID,
+        client_secret: process.env.GOOGLE_CLIENT_SECRET,
+        refresh_token: req.body.refreshToken,
+        grant_type: "refresh_token",
+      }),
+    });
+
+    const data = await request.json();
+    console.log("server 74 | data", data.access_token);
+
+    res.json({
+      accessToken: data.access_token,
+    });
+  } catch (error) {
+    res.json({ error: error.message });
+  }
+});
