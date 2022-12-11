@@ -168,9 +168,9 @@ export default function DashboardContent({
                 >
                     <Toolbar />
                     <Container maxWidth={false} sx={{ mt: 4, mb: 4 }}>
-                        <Grid container spacing={3} style={{ height: '100vh'}}>
+                        <Grid container spacing={3} style={{ height: '100vh' }}>
                             {/* Chart */}
-                            <Grid item xs={12} md={8} lg={9} style={{height: 'inherit'}}>
+                            <Grid item xs={12} md={8} lg={9} style={{ height: 'inherit' }}>
                                 <Paper
                                     sx={{
                                         p: 2,
@@ -200,7 +200,7 @@ export default function DashboardContent({
 
                                 </Paper>
                             </Grid>
-                      
+
                             {/* Recent Deposits */}
                             <Grid item xs={12} md={4} lg={3}>
                                 <Paper

@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from "react";
-import {getMyGmailList} from "./gmailApi";
-// import {Event} from  "./gmail";
 import {ShowEmailList} from  "./showEmailList";
 import { GetEvents } from './listeventApi';
 import { CreateEvent } from "./createeventApi";
@@ -10,7 +8,6 @@ import 'react-calendar/dist/Calendar.css';
 import { Link } from "react-router-dom";
 import {ApolloClient,InMemoryCache,ApolloProvider,HttpLink,from} from '@apollo/client';
 import {onError} from "@apollo/client/link/error"
-// import Form from "./Form.js";
 import GetStudents from "./GetStudents.js";
 import SendMail from "./sendMail";
 
