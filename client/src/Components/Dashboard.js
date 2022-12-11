@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import {getMyGmailList} from "./gmailApi";
 import {ShowEmailList} from  "./showEmailList";
 import { GetEvents } from './listeventApi';
 import { CreateEvent } from "./createeventApi";
