@@ -1,4 +1,12 @@
 import React, { useState, useEffect } from "react";
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import Divider from '@mui/material/Divider';
+import ListItemText from '@mui/material/ListItemText';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import Avatar from '@mui/material/Avatar';
+import Typography from '@mui/material/Typography';
+import { Card, CardContent } from "@mui/material";
 const tokens = require("./tokens")
 
 // import closeIcon from './src/public/icons8-remove-24.png'
@@ -46,7 +54,7 @@ export function GetEvents({ isLoggedIn, selectedDate, eventChanged, setEventChan
 
   function deleteEvent(event) {
     console.log(event)
-    fetch("https://www.googleapis.com/calendar/v3/calendars/primary/events/"+event.id, {
+    fetch("https://www.googleapis.com/calendar/v3/calendars/primary/events/" + event.id, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
@@ -55,40 +63,90 @@ export function GetEvents({ isLoggedIn, selectedDate, eventChanged, setEventChan
     })
       .then((response) => {
         console.log(response)
-        
+
       }).then(() => setEventChanged(prev => !prev))
   }
   return (
-    <div>
+    // <div>
+    //   {
+    //     isLoggedIn && events !== undefined && events !== null ?
+    //       events.length === 0 ?
+    //         `No events on ${selectedDate}`
+    //         :
+    //         <>
+    //           <div>Events on {new Date(selectedDate).toDateString()}</div>
+    //           {
+    //             events.map(e => {
+    //               return (
+    //                 <div style={{ display: 'flex' }}>
+
+    //                   <div style={{ marginRight: '10px' }}>
+    //                     {new Date(e.start.dateTime).toDateString() + ' ' + new Date(e.start.dateTime).toLocaleTimeString()}
+    //                   </div>
+    //                   <div>
+    //                     {e.summary}
+    //                   </div>
+    //                   <div>
+    //                     <button onClick={() => deleteEvent(e)} > delete </button>
+    //                   </div>
+
+    //                 </div>
+    //               )
+    //             })}</>
+    //       :
+    //       <></>
+    //   }
+    // </div>
+
+    <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
       {
         isLoggedIn && events !== undefined && events !== null ?
-          events.length === 0 ?
+          (events.length === 0 ?
             `No events on ${selectedDate}`
             :
-            <>
-              <div>Events on {new Date(selectedDate).toDateString()}</div>
-              {
-                events.map(e => {
-                  return (
-                    <div style={{ display: 'flex' }}>
 
-                      <div style={{ marginRight: '10px' }}>
-                        {new Date(e.start.dateTime).toDateString() + ' ' + new Date(e.start.dateTime).toLocaleTimeString()}
-                      </div>
-                      <div>
-                        {e.summary}
-                      </div>
-                      <div>
-                        <button onClick={() => deleteEvent(e)} > delete </button>
-                      </div>
+            events.map(e => {
+              const dt = new Date(e.start.dateTime).toDateString() + ' ' + new Date(e.start.dateTime).toLocaleTimeString();
+              return (
+                <>
+                  <Card style={{ marginBottom: '5px', marginTop: '5px'}}>
+                    <CardContent style={{ padding: 'unset'}}>
+                      <ListItem alignItems="flex-start">
+                        {/* <ListItemAvatar>
+                        <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
+                      </ListItemAvatar> */}
+                        <ListItemText
+                          primary={e.summary}
+                          secondary={
+                            <React.Fragment>
+                              <Typography
+                                sx={{ display: 'inline' }}
+                                component="h1"
+                                variant="caption"
+                                color="text.primary"
+                              >
+                                {dt}
+                              </Typography>
+                              {/* {` — ${e.summary}`} */}
+                            </React.Fragment>
+                          }
+                        />
 
-                    </div>
-                  )
-                })}</>
+                      </ListItem>
+                    </CardContent>
+                  </Card>
+                  <Divider variant="inset" component="li" style={{ margin: 'unset' }} />
+                </>
+              )
+            })
+
+
+          )
           :
-          <></>
+          "NOT LOGGED IN"
       }
-    </div>
+
+    </List>
   )
 }
 

@@ -1,0 +1,32 @@
+version: '3.9'
+services:
+  # node
+  node:
+    image: ee547:project
+    container_name: EE547_project
+    volumes: # optional to preserve database after container is deleted.
+      - /Users/divya/Documents/EE547/EE547/:/data/
+    ports:
+      - "3005:3005"
+    stdin_open: true
+    tty: true
+
+  # mongodb
+  mongodb:
+    image: mongo:latest # use the latest image.
+    container_name: mongodb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+  
+  # Mongo Express Service
+  mongo-express:
+    image: mongo-express:latest # latest image
+    container_name: mongo-express
+    restart: unless-stopped
+    ports:
+      - "8081:8081"
+    environment:
+      ME_CONFIG_MONGODB_SERVER: mongodb
+
+# docker compose up -d 

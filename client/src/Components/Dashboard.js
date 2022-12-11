@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import {getMyGmailList} from "./gmailApi";
-import {Event} from  "./event";
+// import {Event} from  "./gmail";
+import {ShowEmailList} from  "./showEmailList";
 import { GetEvents } from './listeventApi';
 import { CreateEvent } from "./createeventApi";
 import { setTokens } from "./tokens";
@@ -11,7 +12,7 @@ import {ApolloClient,InMemoryCache,ApolloProvider,HttpLink,from} from '@apollo/c
 import {onError} from "@apollo/client/link/error"
 // import Form from "./Form.js";
 import GetStudents from "./GetStudents.js";
-
+import DashboardContent from './d';
 
 function GoogleAPI() {
 
@@ -37,7 +38,7 @@ const client = new ApolloClient({
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [eventChanged, setEventChanged] = useState(false)
   const [selectedDate, setSelectedDate] = useState(new Date())
-  const [isGmailEnabled, setIsGmailEnabled] = useState([false]);
+  const [isGmailEnabled, setIsGmailEnabled] = useState(true);
 
     useEffect(() => {
     handleTokenFromQueryParams();
@@ -93,8 +94,23 @@ const client = new ApolloClient({
     };
   
     return (
+
+      
       <div >
-        <h1>Google</h1>
+
+        <DashboardContent 
+          signOut={signOut}
+          createGoogleAuthLink={createGoogleAuthLink} 
+          isLoggedIn={isLoggedIn}
+          isGmailEnabled={isGmailEnabled}
+          setEventChanged={setEventChanged}
+          selectedDate={selectedDate}
+          eventChanged={eventChanged}
+          setSelectedDate={setSelectedDate}
+          />
+
+        <br />
+        {/* <h1>Google</h1>
         {!isLoggedIn ? (
           <button onClick={createGoogleAuthLink}>Login</button>
         ) : (
@@ -128,7 +144,7 @@ const client = new ApolloClient({
       
         <div>
           <GetEvents isLoggedIn={isLoggedIn} selectedDate={selectedDate} eventChanged={eventChanged} setEventChanged={setEventChanged}/>
-        </div>
+        </div> */}
 
       </div>
     );

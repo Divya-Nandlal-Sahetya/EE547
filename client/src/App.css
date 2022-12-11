@@ -1,5 +1,5 @@
-**    Login Page     **
-form {
+/**    Login Page     **/
+/* form {
     background-image: url("http://localhost:3001/uscbg2.jpg") ;
     background-position: 'center';
     background-repeat: no-repeat;
@@ -158,10 +158,10 @@ body {
     cursor: pointer;
     text-transform: capitalize;
 justify-content: right;
-}
+} */
 
 /***    Landing Page     ***/
-.main-title,
+/* .main-title,
 .main-para {
     color: #f1f1f1
 }
@@ -200,12 +200,12 @@ justify-content: right;
 #reg_btn:hover span:after {
   opacity: 1;
   right: 0;
-}
+} */
 
 
 
 /***    Register Page     ***/
-#checkbox {
+/* #checkbox {
     width: 1rem
 }
 
@@ -215,9 +215,9 @@ form span {
 
 #reset_pass_lbl {
     float: left
-}
+} */
 
 /***    Home Page     ***/
-.home-page-title {
+/* .home-page-title {
     color: #222
-}
+} */
