@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import {getMyGmailList} from "./gmailApi";
-import {Event} from  "./event";
+import {ShowEmailList} from  "./showEmailList";
 import { GetEvents } from './listeventApi';
 import { CreateEvent } from "./createeventApi";
 import { setTokens } from "./tokens";
@@ -11,6 +11,7 @@ import {ApolloClient,InMemoryCache,ApolloProvider,HttpLink,from} from '@apollo/c
 import {onError} from "@apollo/client/link/error"
 // import Form from "./Form.js";
 import GetStudents from "./GetStudents.js";
+import SendMail from "./sendMail";
 
 
 function GoogleAPI() {
@@ -108,9 +109,11 @@ const client = new ApolloClient({
           </div>
         )}
         <div>
-          <Event isLoggedIn={isLoggedIn} isGmailEnabled={isGmailEnabled}/>
+          <ShowEmailList isLoggedIn={isLoggedIn} isGmailEnabled={isGmailEnabled}/>
         </div>
-
+        <div> 
+        <SendMail isLoggedIn={isLoggedIn}/>
+        </div>
         
       
 
