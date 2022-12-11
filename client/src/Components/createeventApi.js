@@ -1,8 +1,30 @@
-
-import React, { useState, useEffect } from "react";
+import { Button } from "@mui/material";
+import React, { useState, useEffect, useRef, Fragment } from "react";
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
-
+import dayjs from 'dayjs';
+import Stack from '@mui/material/Stack';
+import TextField from '@mui/material/TextField';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { TimePicker } from '@mui/x-date-pickers/TimePicker';
+// import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
+import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
+import PropTypes from 'prop-types';
+import { styled } from '@mui/material/styles';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
+import Typography from '@mui/material/Typography';
+import DateFnsUtils from '@date-io/date-fns'; // choose your lib
+import {
+  DateTimePicker,
+  MuiPickersUtilsProvider,
+} from '@material-ui/pickers';
 const tokens = require("./tokens")
 
 
@@ -76,9 +98,10 @@ export function CreateEvent({isLoggedIn, setEventChanged}) {
 
     return (
         <>
-            <button type="button" className="button" onClick={() => setOpen(o => !o)}>
+           <Button variant="contained" className="button" onClick={() => setOpen(o => !o)}
+                style={{ marginBottom: '5px' }}>
                 Create Event
-            </button>
+            </Button>
             
             <Popup open={open} closeOnDocumentClick onClose={closeModal} position="bottom left">
                 <a className="close" onClick={closeModal}>
@@ -115,8 +138,8 @@ export function CreateEvent({isLoggedIn, setEventChanged}) {
             </Popup>
         </>
     );
-}
-// import { Button } from "@mui/material";
+    }
+// / import { Button } from "@mui/material";
 // import React, { useState, useEffect, useRef, Fragment } from "react";
 // import Popup from 'reactjs-popup';
 // import 'reactjs-popup/dist/index.css';
@@ -365,7 +388,7 @@ export function CreateEvent({isLoggedIn, setEventChanged}) {
 //                             /> */}
 //                             <MuiPickersUtilsProvider utils={DateFnsUtils}>
 
-//                                 <DateTimePicker value={selectedDate} onChange={setStartDateTime} />
+//                                 <DateTimePicker value={selectedDate} onChange={handleDateChange} />
 //                             </MuiPickersUtilsProvider>
 //                         </Stack>
 //                     </LocalizationProvider>
