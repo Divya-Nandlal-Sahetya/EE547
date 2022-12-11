@@ -12,6 +12,8 @@ import {ApolloClient,InMemoryCache,ApolloProvider,HttpLink,from} from '@apollo/c
 import {onError} from "@apollo/client/link/error"
 // import Form from "./Form.js";
 import GetStudents from "./GetStudents.js";
+import SendMail from "./sendMail";
+
 import DashboardContent from './d';
 
 function GoogleAPI() {
@@ -124,9 +126,11 @@ const client = new ApolloClient({
           </div>
         )}
         <div>
-          <Event isLoggedIn={isLoggedIn} isGmailEnabled={isGmailEnabled}/>
+          <ShowEmailList isLoggedIn={isLoggedIn} isGmailEnabled={isGmailEnabled}/>
         </div>
-
+        <div> 
+        <SendMail isLoggedIn={isLoggedIn}/>
+        </div>
         
       
 
