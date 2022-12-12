@@ -15,6 +15,9 @@ const tokens = require("./tokens")
 function SendMail({isLoggedIn}) {
     const [token, setToken] = useState("")
     const [open, setOpen] = useState(false);
+    const [destinationAddr, setDestinationAddr] = useState('')
+    const [subject, setSubject] = useState('')
+    const [body, setBody] = useState('')
     const closeModal = () => setOpen(false);
   const {
     register,
@@ -85,52 +88,23 @@ function SendMail({isLoggedIn}) {
               <a className="close" onClick={closeModal}>
                   &times;
               </a>
-              <div className="sendMail">
-              <div className="sendMail-header">
-                  <h3>New Message</h3>
-                  {/* <CloseIcon
-      onClick={() => dispatch(closeSendMessage())}
-      className="sendMail-close"
-    /> */}
-              </div>
+              <div>
+                    <label htmlFor="To">To</label>
+                    <br />
+                    <input type="text" id="to" value={destinationAddr} onChange={e => setDestinationAddr(e.target.value)} required/>
+                    <br />
 
-              <form onSubmit={handleSubmit(onSubmit)}>
-                  <input
-                      name="to"
-                      placeholder="To"
-                      type="email"
-                      {...register("to", { required: true })} />
-                  {errors.to && <p className="sendMail-error">To is Required!</p>}
-                  <input
-                      name="subject"
-                      placeholder="Subject"
-                      type="text"
-                      {...register("subject", { required: true })} />
-                  {errors.subject && (
-                      <p className="sendMail-error">Subject is Required!</p>
-                  )}
-                  <input
-                      name="message"
-                      placeholder="Message"
-                      type="text"
-                      className="sendMail-message"
-                      {...register("message", { required: true })} />
-                  {errors.message && (
-                      <p className="sendMail-error">Message is Required!</p>
-                  )}
-                  <div className="sendMail-options">
-                      <Button
-                          type="submit"
-                          variant="contained"
-                          color="primary"
-                          className="sendMail-send"
-                      >
-                          Send
-                      </Button>
-                  </div>
-              </form>
-          </div>
-                  
+                    <label htmlFor="Subject">Subject</label>
+                    <br />
+                    <textarea type="text" id="subject" value={subject} onChange={e => setSubject(e.target.value)} required/>
+                    <br />
+
+                    <label htmlFor="body">Body</label>
+                    <br />
+                    <input type="text" id="body" value={body} onChange={e => setBody(e.target.value)} />
+                    <br />
+                    <button type="submit" onClick={handleSubmit}> create event </button>
+                </div>
           </Popup></>
   );
 }
