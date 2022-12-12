@@ -7,6 +7,8 @@ import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 import { Card, CardContent } from "@mui/material";
+import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
 const tokens = require("./tokens")
 
 // import closeIcon from './src/public/icons8-remove-24.png'
@@ -128,8 +130,11 @@ export function GetEvents({ isLoggedIn, selectedDate, eventChanged, setEventChan
                             </React.Fragment>
                           }
                         />
-
+                        <IconButton aria-label="delete" color="primary" onClick={() => deleteEvent(e)}>
+                          <DeleteIcon />
+                        </IconButton>
                       </ListItem>
+                      
                     </CardContent>
                   </Card>
                   <Divider variant="inset" component="li" style={{ margin: 'unset' }} />

@@ -7,17 +7,13 @@ type Query {
 
   students(limit: Int, offset: Int, sort: String): [Person]!
 
-  grades(id: ID!): gradebook
+  grade(emailid: String!): gradebook
 }
 
 type Mutation {
   personCreate(personInput: personCreateInput): Person
   personDelete(id: ID!): Boolean
   personUpdate(id: ID!, personInput: personUpdateInput): Person
-
-  subjectCreate(subjectInput: subjectCreateInput): Subject
-  subjectDelete(id: ID!): Boolean
-  subjectUpdate(id: ID!, subjectInput: subjectUpdateInput): Subject
 
   gradebookCreate(gradebookInput: gradebookCreateInput): gradebook
   gradebookDelete(id: ID!): Boolean
@@ -54,43 +50,25 @@ type Person {
   role: roleEnum
   gpa: Float
   emailid: String
-}
 
-input subjectCreateInput {
-  name: String
-  code: String 
-  is_active: Boolean
-}
-
-input subjectUpdateInput {
-  name: String
-  is_active: Boolean
 }
 
 input gradebookCreateInput {
-  subject_code: String
+  subject: String
   grade: String
   gpa: Float
   student_id: ID
 }
 
 input gradebookUpdateInput {
-  subject_code: String
+  subject: String
   grade: String
   gpa: Float
-}
-
-type Subject {
-  is_active: Boolean
-  name: String
-  code: String
-  id: ID
 }
 
 type gradebook {
-  id: ID!
-  subject_code: String
+  emailid: String!
+  subject: String
   grade: String
   gpa: Float
-  student_id: ID
 }

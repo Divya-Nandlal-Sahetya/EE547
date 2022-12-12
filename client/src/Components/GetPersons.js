@@ -7,16 +7,51 @@ import Divider from '@mui/material/Divider';
 import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
 import { Card, CardContent } from "@mui/material";
-function GetPersons({emailid}) {
-    
-    const {error,loading,data} = useQuery(LOAD_STUDENT,{ variables: { emailid } }); 
-    const [student,setStudents] = useState([]);
+import { ApolloClient, InMemoryCache, ApolloProvider, HttpLink, from } from '@apollo/client';
+import { onError } from "@apollo/client/link/error"
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from "@mui/material/Paper";
+import Table from '@mui/material/Table';
 
+
+
+
+function GetPersons({emailid}) {
+
+
+    const {error,loading,data} = useQuery(LOAD_STUDENT,{ variables: { emailid } }); 
+    const [records,setRecords] = useState([]);
+
+    const errorLink = onError(({ graphqlErrors, networkError }) => {
+      if (graphqlErrors) {
+        graphqlErrors.map(({ message, location, path }) => {
+          alert(`Graphql error ${message}`)
+        });
+      }
+    });
+  
+    const link = from([
+      errorLink,
+      new HttpLink({ uri: "http://localhost:8080/graphql" })
+    ])
+  
+  
+    const client = new ApolloClient({
+      cache: new InMemoryCache(),
+      link: link,
+    });
+    
+    
     useEffect(() => {
         console.log("GetPersons.js 2 | data", data);
         if (data) {
-          console.log("HIIiiiiiiiiii",data)
-            setStudents(data.student);
+          console.log("********************************************",data.student);      
+            setRecords(records,data.student);
+            //Add role here and make view changeable
 
         }
         if (error) {
@@ -25,51 +60,37 @@ function GetPersons({emailid}) {
 
     }, [data])
 
-        return (
-          // // <div>
-          // //   {student.fname}
-          // // </div>
-          //   <Table Student Data>
-          //     <thead>
-          //       <h3>Your Data</h3>
-          //       <tr>
-          //         <th>First Name</th>
-          //         <th>Last Name</th>
-          //         <th>GPA</th>
-          //       </tr>
-          //     </thead>
-          //     <tbody>
-          //       <tr>
-          //         <td>{student.fname}</td>
-          //         <td>{student.lname}</td>
-          //         <td>{student.gpa}</td>
-          //       </tr>
-          //     </tbody>
-          //   </Table>
-<Card style={{ marginBottom: '5px', marginTop: '5px'}}>
-                    <CardContent style={{ padding: 'unset'}}>
-                      <ListItem alignItems="flex-start">
-                        <ListItemText
-                          primary={student.name}
-                          secondary={
-                            <React.Fragment>
-                              <Typography
-                                sx={{ display: 'inline' }}
-                                component="h1"
-                                variant="caption"
-                                color="text.primary"
-                              >
-                                {student.gpa}
-                              </Typography>
-                              {/* {` — ${e.summary}`} */}
-                            </React.Fragment>
-                          }
-                        />
+  return (
+    // records.map(e => {
+    //   const dt = new Date(e.start.dateTime).toDateString() + ' ' + new Date(e.start.dateTime).toLocaleTimeString();
+    //   return (
+    //     <>
+          {/* <Card style={{ marginBottom: '5px', marginTop: '5px'}}>
+            <CardContent style={{ padding: 'unset'}}>
+              <ListItem alignItems="flex-start">
+                <ListItemText
+                  primary={e.summary}
+                  secondary={
+                    <React.Fragment>
+                      <Typography
+                        sx={{ display: 'inline' }}
+                        component="h1"
+                        variant="caption"
+                        color="text.primary"
+                      >
+                        {dt}
+                      </Typography>
+                      {` — ${e.summary}`}
+                    </React.Fragment>
+                  }
+                />
 
-                      </ListItem>
-                    </CardContent>
-                  </Card>
-          );
-        }
+              </ListItem>
+            </CardContent>
+          </Card>
+          <Divider variant="inset" component="li" style={{ margin: 'unset' }} /> */}
+        // </>
+      )
+    }
 
 export default GetPersons;

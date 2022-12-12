@@ -53,7 +53,6 @@ const config = require(mongo_file_path);
   app.use(
     "/graphql",
     graphqlHTTP(async (req) => {
-      console.log("req");
       return {
         schema,
         graphiql: true,

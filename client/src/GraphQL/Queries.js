@@ -36,7 +36,6 @@ query($emailid:String!){
     lname
     name
     gpa
-    
     }
     }
 `

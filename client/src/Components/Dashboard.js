@@ -111,7 +111,6 @@ function GoogleAPI() {
 
 
     <div >
-
       <DashboardContent
         signOut={signOut}
         createGoogleAuthLink={createGoogleAuthLink}
@@ -121,46 +120,9 @@ function GoogleAPI() {
         selectedDate={selectedDate}
         eventChanged={eventChanged}
         setSelectedDate={setSelectedDate}
+        emailid={emailid}
+        client = {client}
       />
-
-      <br />
-      {/* <h1>Google</h1>
-        {!isLoggedIn ? (
-          <button onClick={createGoogleAuthLink}>Login</button>
-        ) : (
-          <div>
-            <h2>Logged In</h2>
-            <button onClick={enableGmail}>gmail list
-            </button>
-            <div>
-      </div>,
-            <button onClick={signOut}>Sign Out</button>
-          </div>
-        )}
-        <div>
-          <ShowEmailList isLoggedIn={isLoggedIn} isGmailEnabled={isGmailEnabled}/>
-        </div>
-        <div> 
-        <SendMail isLoggedIn={isLoggedIn}/>
-        </div>
-        
-      
-
-          <div>
-          <ApolloProvider client={client}>
-        <GetStudents/>
-        </ApolloProvider>
-        </div>
-        <div>
-          
-        <CreateEvent isLoggedIn={isLoggedIn} setEventChanged={setEventChanged} />
-        </div>
-          
-        <Calendar onChange={(prev) => setSelectedDate(prev)} />
-      
-        <div>
-          <GetEvents isLoggedIn={isLoggedIn} selectedDate={selectedDate} eventChanged={eventChanged} setEventChanged={setEventChanged}/>
-        </div> */}
 
     </div>
   );

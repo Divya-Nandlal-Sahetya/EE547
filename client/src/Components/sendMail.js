@@ -1,14 +1,8 @@
 import React, { useState, useEffect } from "react";
-import "./sendMail.css";
 import Popup from 'reactjs-popup';
-//import CloseIcon from "@material-ui/icons/Close";
 import { Button } from "@material-ui/core";
 import { useForm } from "react-hook-form";
 import { Buffer } from 'buffer';
-//import { useDispatch } from "react-redux";
-//import { closeSendMessage } from "../../features/mailSlice";
-//import { db } from "../../firebase";
-//import firebase from "firebase";
 const tokens = require("./tokens")
 
 

@@ -21,12 +21,15 @@ import { GetEvents } from "./listeventApi";
 import { CreateEvent } from "./createeventApi";
 import { setTokens } from "./tokens";
 import Calendar from "react-calendar";
-import SendMail from "./sendMail";
+import Switch from '@mui/material/Switch';
 import { Button } from "@mui/material";
 import uscbg from "./uscbg.png";
-
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import SendMail from "./sendMail";
 import { ShowEmailList } from "./showEmailList";
-
+import GetPersons from "./GetPersons"
+import { ApolloClient, InMemoryCache, ApolloProvider, HttpLink, from } from '@apollo/client';
 function Copyright(props) {
   return (
     <Typography
@@ -102,11 +105,16 @@ export default function DashboardContent({
   selectedDate,
   eventChanged,
   setSelectedDate,
+  emailid,
+  client
 }) {
   const [open, setOpen] = React.useState(true);
+
   const toggleDrawer = () => {
     setOpen(!open);
   };
+
+  const label = { inputProps: { 'aria-label': 'Switch demo' } };
 
   return (
     <ThemeProvider theme={mdTheme}>
@@ -137,6 +145,10 @@ export default function DashboardContent({
               Dashboard
             </Typography>
           </Toolbar>
+          
+          <FormGroup>
+      <FormControlLabel disabled control={<Switch defaultChecked  color="warning" />} label="Student" />
+    </FormGroup>
           {!isLoggedIn ? (
             <Button
               variant="contained"
@@ -154,7 +166,9 @@ export default function DashboardContent({
             <Button variant="contained" color="error" onClick={signOut}>
               Sign Out
             </Button>
+            
           )}
+     
         </AppBar>
 
                 <Box
@@ -179,6 +193,7 @@ export default function DashboardContent({
                                         p: 2,
                                         display: 'flex',
                                         flexDirection: 'column',
+                                        overflow: 'auto'
                                         // height: 240,
                                     }}
 
@@ -191,7 +206,9 @@ export default function DashboardContent({
                                     <SendMail isLoggedIn={isLoggedIn} />
                                     <ShowEmailList isLoggedIn={isLoggedIn} isGmailEnabled={isGmailEnabled} />
                                 </Paper>
-                                <Paper
+                               
+                               {/* Academics*/}
+                               <Paper
                                     sx={{
                                         p: 2,
                                         display: 'flex',
@@ -199,8 +216,10 @@ export default function DashboardContent({
                                         height: 240,
                                     }}
                                 >
-                                    {/* <Orders /> */}
-
+       {/* <ApolloProvider client={client}>
+          <GetPersons emailid={emailid}/>
+        </ApolloProvider> */}
+     
                                 </Paper>
                             </Grid>
 
@@ -214,7 +233,6 @@ export default function DashboardContent({
                     // height: 240,
                   }}
                 >
-                  {/* <Deposits /> */}
 
                   <CreateEvent
                     isLoggedIn={isLoggedIn}

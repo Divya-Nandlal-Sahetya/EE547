@@ -5,6 +5,16 @@ import clsx from 'clsx';
 import { withStyles } from '@material-ui/core/styles';
 import TableCell from '@material-ui/core/TableCell';
 import Paper from '@material-ui/core/Paper';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import Divider from '@mui/material/Divider';
+import ListItemText from '@mui/material/ListItemText';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import Avatar from '@mui/material/Avatar';
+import Typography from '@mui/material/Typography';
+import { Card, CardContent } from "@mui/material";
+import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { AutoSizer, Column, Table } from 'react-virtualized';
 import React, { useState, useEffect } from "react";
 const tokens = require("./tokens")
@@ -232,35 +242,85 @@ export function ShowEmailList({isLoggedIn, isGmailEnabled}){
   }, [isLoggedIn, isGmailEnabled, token])
 
   return(
-    <div>
-      {(isLoggedIn && isGmailEnabled && emails !== undefined && emails !== null) ?
-        emails.length === 0 ?
-          "No emails to Show"
-          : <Paper style={{ height: 350, width: '100%' }}>
-          <VirtualizedTable
-            rowCount={emails.length}
-            rowGetter={({ index }) => emails[index]}
-            columns={[
-              {
-                width: 150,
-                label: 'Date',
-                dataKey: 'date',
-              },
-              {
-                width: 200,
-                label: 'From',
-                dataKey: 'from',
-              },
-              {
-                width: 600,
-                height: 100,
-                label: 'Message',
-                dataKey: 'message'
-              },
-            ]}
-          />
-        </Paper>
-        : <></>}
-    </div>
+<List sx={{ width: '100%', maxWidth: "auto", bgcolor: 'background.paper' }}>
+      {
+        isLoggedIn && isGmailEnabled !== undefined && emails !== null ?
+          (emails.length === 0 ?
+            `No emails`
+            :
+
+            emails.map(e => {
+              return (
+                <>
+                  <Card style={{ marginBottom: '5px', marginTop: '5px'}}>
+                    <CardContent style={{ padding: 'unset'}}>
+                      <ListItem alignItems="flex-start">
+                        <ListItemText
+                          primary={e.from}
+                          secondary={
+                            <React.Fragment>
+                              <Typography
+                                sx={{ display: 'inline' }}
+                                component="h1"
+                                variant="caption"
+                                color="text.primary"
+                              >
+                                {e.date}
+                              </Typography>
+                              {` — ${e.message}`}
+                            </React.Fragment>
+                          }
+                        />
+                      </ListItem>
+                      
+                    </CardContent>
+                  </Card>
+                  <Divider variant="inset" component="li" style={{ margin: 'unset' }} />
+                </>
+              )
+            })
+
+
+          )
+          :
+          "NOT LOGGED IN"
+      }
+
+    </List>
   )
 }
+
+
+
+  //   <div>
+  //     {(isLoggedIn && isGmailEnabled && emails !== undefined && emails !== null) ?
+  //       emails.length === 0 ?
+  //         "No emails to Show"
+  //         : <Paper style={{ height: 350, width: '100%' }}>
+  //         <VirtualizedTable
+  //           rowCount={emails.length}
+  //           rowGetter={({ index }) => emails[index]}
+  //           columns={[
+  //             {
+  //               width: 150,
+  //               label: 'Date',
+  //               dataKey: 'date',
+  //             },
+  //             {
+  //               width: 200,
+  //               label: 'From',
+  //               dataKey: 'from',
+  //             },
+  //             {
+  //               width: 600,
+  //               height: 100,
+  //               label: 'Message',
+  //               dataKey: 'message'
+  //             },
+  //           ]}
+  //         />
+  //       </Paper>
+  //       : <></>}
+  //   </div>
+  // )
+// }
