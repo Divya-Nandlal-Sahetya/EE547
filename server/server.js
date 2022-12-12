@@ -2,6 +2,7 @@ const express = require("express");
 const fs = require("fs");
 const { graphqlHTTP } = require("express-graphql");
 const DataLoader = require("dataloader");
+require("dotenv").config();
 const {
   assertResolversPresent,
   makeExecutableSchema,
@@ -11,7 +12,7 @@ const { MongoClient, ObjectId } = require("mongodb");
 const app = express();
 const node_port = 8080;
 
-let mongo_file_path = "/home/kd/Documents/USC/EE547/Project/EE547/server/config/mongo.json";
+let mongo_file_path =process.env.MONGO_CONFIG;
 const config = require(mongo_file_path);
 
 (async function () {
@@ -25,7 +26,7 @@ const config = require(mongo_file_path);
   await connection.connect();
   db = connection.db(database);
 
-  const typeDefs = fs.readFileSync("/home/kd/Documents/USC/EE547/Project/EE547/server/schema.graphql").toString("utf-8");
+  const typeDefs = fs.readFileSync(process.env.SCHEMA_GRAPHQL).toString("utf-8");
 
   function checkValidJSON(file_path) {
     try {
@@ -80,10 +81,10 @@ const config = require(mongo_file_path);
 
 //GET PERSONS
 async function getPersons(db, keys) {
-  keys = keys.map((key) => ObjectId(key));
+  // keys = keys.map((key) => ObjectId(key));
   let persons = await db
     .collection("person")
-    .find({ _id: { $in: keys } })
+    .find({ emailid: { $in: keys } })
     .toArray();
   return (
     formatPerson(persons) ||
@@ -130,7 +131,7 @@ const resolvers = {
         role: enum_role[personInput.role],
         is_active: personInput.is_active ? personInput.is_active:true,
         gpa: personInput.gpa?personInput.gpa:null,
-        email: personInput.email?personInput.email:null,
+        emailid: personInput.emailid?personInput.emailid:null,
       };
       let res = await context.db.collection("person").insertOne(person);
       return context.loaders.person.load(res.insertedId)  ;
@@ -246,8 +247,8 @@ const resolvers = {
 },
 
   Query: {
-    person: (_, { pid }, context) => {
-      return context.loaders.person.load(pid);
+    person: (_, { emailid }, context) => {
+      return context.loaders.person.load(emailid);
     },
 
     persons: async (_, { limit = 20, offset = 0, sort = null }, context) => {
@@ -289,8 +290,8 @@ const resolvers = {
     },
 
 
-    student: (_, { id }, context) => {
-      return context.loaders.person.load(id);
+    student: (_, { emailid }, context) => {
+      return context.loaders.person.load(emailid);
     },
 
     students: async (_, { limit = 20, offset = 0, sort = null }, context) => {
@@ -370,7 +371,7 @@ function formatPerson(person) {
     role: rev_enum_role[person.role],
     is_active: person.is_active,
     gpa: person.gpa?person.gpa:null,
-    email: person.email,
+    emailid: person.emailid,
   };
   return res;
 }

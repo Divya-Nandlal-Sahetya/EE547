@@ -3,7 +3,7 @@ type Query {
 
   teachers(limit: Int, offset: Int, sort: String): [Person]!
 
-  student(id: ID!): Person
+  student(emailid: String!): Person
 
   students(limit: Int, offset: Int, sort: String): [Person]!
 
@@ -35,7 +35,7 @@ input personCreateInput {
   lname: String
   role: roleEnum
   gpa: Float
-  email: String
+  emailid: String
 }
 
 input personUpdateInput {
@@ -50,15 +50,15 @@ type Person {
   fname: String
   lname: String
   name: String
-  id: ID!
+  id: ID
   role: roleEnum
   gpa: Float
-  email: String
+  emailid: String
 }
 
 input subjectCreateInput {
   name: String
-  code: String
+  code: String 
   is_active: Boolean
 }
 

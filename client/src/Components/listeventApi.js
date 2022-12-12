@@ -112,9 +112,6 @@ export function GetEvents({ isLoggedIn, selectedDate, eventChanged, setEventChan
                   <Card style={{ marginBottom: '5px', marginTop: '5px'}}>
                     <CardContent style={{ padding: 'unset'}}>
                       <ListItem alignItems="flex-start">
-                        {/* <ListItemAvatar>
-                        <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
-                      </ListItemAvatar> */}
                         <ListItemText
                           primary={e.summary}
                           secondary={

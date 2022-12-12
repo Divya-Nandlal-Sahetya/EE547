@@ -30,10 +30,13 @@ query{
 `
 
 export const LOAD_STUDENT = gql`
-query($id:ID!){
-    student(id:$id){
+query($emailid:String!){
+    student(emailid:$emailid){
+    fname
+    lname
     name
     gpa
+    
     }
     }
 `
