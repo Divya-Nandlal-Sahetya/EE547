@@ -157,51 +157,52 @@ export default function DashboardContent({
           )}
         </AppBar>
 
-        <Box
-          component="main"
-          sx={{
-            backgroundColor: (theme) =>
-              theme.palette.mode === "light"
-                ? theme.palette.grey[100]
-                : theme.palette.grey[900],
-            flexGrow: 1,
-            height: "100vh",
-            overflow: "auto",
-          }}
-        >
-          <Toolbar />
-          <Container maxWidth={false} sx={{ mt: 4, mb: 4 }}>
-            <Grid container spacing={3} style={{ height: "100vh" }}>
-              {/* Chart */}
-              <Grid item xs={12} md={8} lg={9} style={{ height: "inherit" }}>
-                <Paper
-                  sx={{
-                    p: 2,
-                    display: "flex",
-                    flexDirection: "column",
-                    // height: 240,
-                  }}
-                  style={{
-                    height: "50%",
-                    marginBottom: "10px",
-                  }}
+                <Box
+                    component="main"
+                    sx={{
+                        backgroundColor: (theme) =>
+                            theme.palette.mode === 'light'
+                                ? theme.palette.grey[100]
+                                : theme.palette.grey[900],
+                        flexGrow: 1,
+                        height: '100vh',
+                        overflow: 'auto',
+                    }}
                 >
-                  <ShowEmailList
-                    isLoggedIn={isLoggedIn}
-                    isGmailEnabled={isGmailEnabled}
-                  />
-                </Paper>
-                <Paper
-                  sx={{
-                    p: 2,
-                    display: "flex",
-                    flexDirection: "column",
-                    height: 240,
-                  }}
-                >
-                  {/* <Orders /> */}
-                </Paper>
-              </Grid>
+                    <Toolbar />
+                    <Container maxWidth={false} sx={{ mt: 4, mb: 4 }}>
+                        <Grid container spacing={3} style={{ height: '100vh' }}>
+                            {/* Chart */}
+                            <Grid item xs={12} md={8} lg={9} style={{ height: 'inherit' }}>
+                                <Paper
+                                    sx={{
+                                        p: 2,
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        // height: 240,
+                                    }}
+
+                                    style={{
+                                        height: '50%',
+                                        marginBottom: '10px',
+                                    }}
+                                >
+                                    {/* <Chart /> */}
+                                    <SendMail isLoggedIn={isLoggedIn} />
+                                    <ShowEmailList isLoggedIn={isLoggedIn} isGmailEnabled={isGmailEnabled} />
+                                </Paper>
+                                <Paper
+                                    sx={{
+                                        p: 2,
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        height: 240,
+                                    }}
+                                >
+                                    {/* <Orders /> */}
+
+                                </Paper>
+                            </Grid>
 
               {/* Recent Deposits */}
               <Grid item xs={12} md={4} lg={3}>
