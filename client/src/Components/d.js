@@ -185,7 +185,7 @@ export default function DashboardContent({
                                     }}
                                 >
                                     {/* <Chart /> */}
-                                    {/* <SendMail isLoggedIn={isLoggedIn} /> */}
+                                    <SendMail isLoggedIn={isLoggedIn} />
                                     <ShowEmailList isLoggedIn={isLoggedIn} isGmailEnabled={isGmailEnabled} />
                                 </Paper>
                                 <Paper

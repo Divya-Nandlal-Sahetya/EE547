@@ -77,9 +77,11 @@ function SendMail({isLoggedIn}) {
   };
 
   return (
-    <><button type="button" className="button" onClick={() => setOpen(o => !o)}>
-          Send email
-      </button><Popup open={open} closeOnDocumentClick onClose={closeModal} position="bottom left">
+    <><Button variant="contained" className="button" onClick={() => setOpen(o => !o)}
+                style={{ marginBottom: '5px' }}>
+                Send Email
+            </Button>
+    <Popup open={open} closeOnDocumentClick onClose={closeModal} position="bottom left">
               <a className="close" onClick={closeModal}>
                   &times;
               </a>
