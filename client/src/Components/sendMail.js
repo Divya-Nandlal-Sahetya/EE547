@@ -126,6 +126,7 @@ function SendMail({isLoggedIn}) {
                       placeholder="Message"
                       type="text"
                       className="sendMail-message"
+                      size="auto"
                       {...register("message", { required: true })} />
                   {errors.message && (
                       <p className="sendMail-error">Message is Required!</p>
