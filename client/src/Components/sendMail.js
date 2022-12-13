@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Popup from 'reactjs-popup';
 //import CloseIcon from "@material-ui/icons/Close";
-import { Button } from "@material-ui/core";
+import { Button } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { Buffer } from 'buffer';
 //import { useDispatch } from "react-redux";
@@ -121,7 +121,7 @@ function SendMail({isLoggedIn}) {
                   <div>
                   Body:
               </div>
-                  <textarea rows="5" cols="60"
+                  <textarea rows="5" cols="50"
                       name="message"
                       placeholder="Message"
                       type="text"
