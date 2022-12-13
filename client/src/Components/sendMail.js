@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Popup from 'reactjs-popup';
-import { Button } from "@material-ui/core";
+import Button from "@mui/material/Button";
 import { useForm } from "react-hook-form";
 import { Buffer } from 'buffer';
 const tokens = require("./tokens")

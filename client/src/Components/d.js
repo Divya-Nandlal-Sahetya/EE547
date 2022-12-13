@@ -229,11 +229,13 @@ export default function DashboardContent({
 											p: 2,
 											display: "flex",
 											flexDirection: "column",
-											height: 240,
+											height: '50%',
+											// overflow: 'scroll'
 										}}
 									>
 										<ApolloProvider client={client}>
 											<GetPersons emailid={emailid} isTeacher={isTeacher} />
+											<GetGradebook emailid={emailid} />
 										</ApolloProvider>
 									</Paper>
 								</Grid>

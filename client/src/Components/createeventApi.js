@@ -1,3 +1,32 @@
+// import { Button } from "@mui/material";
+// import React, { useState, useEffect, useRef, Fragment } from "react";
+// import Popup from 'reactjs-popup';
+// import 'reactjs-popup/dist/index.css';
+// import dayjs from 'dayjs';
+// import Stack from '@mui/material/Stack';
+// import TextField from '@mui/material/TextField';
+// import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+// import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+// import { TimePicker } from '@mui/x-date-pickers/TimePicker';
+// // import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+// import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
+// import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
+// import PropTypes from 'prop-types';
+// import { styled } from '@mui/material/styles';
+// import Dialog from '@mui/material/Dialog';
+// import DialogTitle from '@mui/material/DialogTitle';
+// import DialogContent from '@mui/material/DialogContent';
+// import DialogActions from '@mui/material/DialogActions';
+// import IconButton from '@mui/material/IconButton';
+// import CloseIcon from '@mui/icons-material/Close';
+// import Typography from '@mui/material/Typography';
+// import DateFnsUtils from '@date-io/date-fns'; // choose your lib
+// import {
+//   DateTimePicker,
+//   MuiPickersUtilsProvider,
+// } from '@material-ui/pickers';
+// const tokens = require("./tokens")
+
 import { Button } from "@mui/material";
 import React, { useState, useEffect, useRef, Fragment } from "react";
 import Popup from 'reactjs-popup';
@@ -96,14 +125,136 @@ export function CreateEvent({isLoggedIn, setEventChanged}) {
         }
     }
 
+    const [value, setValue] = React.useState(dayjs('2014-08-18T21:11:54'));
+
+
+    const BootstrapDialog = styled(Dialog)(({ theme }) => ({
+        '& .MuiDialogContent-root': {
+            padding: theme.spacing(2),
+            width: '500px',
+            
+        },
+        '&.MuiOutlinedInput-root' : {
+            height: '50px',
+        },
+        '& .MuiDialogActions-root': {
+            padding: theme.spacing(1),
+        },
+    }));
+
+    function BootstrapDialogTitle(props) {
+        const { children, onClose, ...other } = props;
+
+        return (
+            <DialogTitle sx={{ m: 0, p: 2 }} {...other}>
+                {children}
+                {onClose ? (
+                    <IconButton
+                        aria-label="close"
+                        onClick={onClose}
+                        sx={{
+                            position: 'absolute',
+                            right: 8,
+                            top: 8,
+                            color: (theme) => theme.palette.grey[500],
+                        }}
+                    >
+                        <CloseIcon />
+                    </IconButton>
+                ) : null}
+            </DialogTitle>
+        );
+    }
+
+    BootstrapDialogTitle.propTypes = {
+        children: PropTypes.node,
+        onClose: PropTypes.func.isRequired,
+    };
+
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+    const handleClose = () => {
+
+        setOpen(false);
+        // handleSubmit()
+    };
+
+
+    const [descriptionReq, setDescriptonReq] = useState(false)
+    const [summaryReq, setSummaryReq] = useState(false)
+    const [locationReq, setLocationReq] = useState(false)
+    const [startTimeReq, setStartTimeReq] = useState(false)
+    const [endTimeReq, setEndTimeReq] = useState(false)
+
+    const summaryRef = useRef()
+    const descriptionRef = useRef()
+    const locationRef = useRef()
+    const startTimeRef = useRef()
+    const endTimeRef = useRef()
+    const [selectedDate, handleDateChange] = useState(new Date());
+
+    const handleChange = (newValue) => {
+        setValue(newValue);
+    };
     return (
         <>
            <Button variant="contained" className="button" onClick={() => setOpen(o => !o)}
                 style={{ marginBottom: '5px' }}>
                 Create Event
             </Button>
-            
-            <Popup open={open} closeOnDocumentClick onClose={closeModal} position="bottom left">
+            <BootstrapDialog
+                onClose={() => setOpen(false)}
+                aria-labelledby="customized-dialog-title"
+                open={open}
+            >
+                <BootstrapDialogTitle id="customized-dialog-title" onClose={() => setOpen(false)}>
+                    Modal title
+                </BootstrapDialogTitle>
+                <DialogContent dividers>
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <Stack spacing={5}>
+                            <TextField
+                                label="Summary"
+                                // onChange={e => setSummary(e.target.value)}
+                                ref={summaryRef}
+                                required={summaryReq}
+                                values={summary}
+                                error={summaryReq}
+                            />
+                            <TextField
+                                label="Description"
+                                // values={description}
+                                ref={descriptionRef}
+                                // onChange={e => setDescription(e.target.value)}
+                                required={descriptionReq}
+                                error={descriptionReq} />
+                            <TextField
+                                label="Location"
+                                // values={location}
+                                ref={locationRef}
+                                // onChange={e => setLocation(e.target.value)}
+                                required={locationReq}
+                                error={locationReq} />
+                            
+                            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+
+                                <DateTimePicker value={selectedDate} onChange={handleDateChange} />
+                            </MuiPickersUtilsProvider>
+                            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+
+                                <DateTimePicker value={selectedDate} onChange={handleDateChange} />
+                            </MuiPickersUtilsProvider>
+                        </Stack>
+                    </LocalizationProvider>
+                </DialogContent>
+                <DialogActions>
+                    <Button autoFocus onClick={handleSubmit}>
+                        Save changes
+                    </Button>
+                </DialogActions>
+            </BootstrapDialog>
+            {/* <Popup open={open} closeOnDocumentClick onClose={closeModal} position="bottom left">
                 <a className="close" onClick={closeModal}>
                     &times;
                 </a>
@@ -135,7 +286,7 @@ export function CreateEvent({isLoggedIn, setEventChanged}) {
 
                     <button type="submit" onClick={handleSubmit}> create event </button>
                 </div>
-            </Popup>
+            </Popup> */}
         </>
     );
     }
