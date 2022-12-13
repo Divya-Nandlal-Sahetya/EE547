@@ -63,6 +63,7 @@ const config = require(mongo_file_path);
             person: new DataLoader((keys) => getPersons(db, keys)),
             subject: new DataLoader((keys) => getSubjects(db, keys)),
             gradebooks: new DataLoader((keys) => getGradebook(db, keys)),
+            allgradebooks: new DataLoader((keys) => getGradebook(db, keys))
           },
         },
       };
@@ -114,7 +115,7 @@ async function getGradebook(db, keys) {
     .collection("gradebook")
     .find({ emailid: { $in: keys } })
     .toArray();
-    //console.loggradebook)
+    console.log(gradebook)
   return (
     formatGradebook(gradebook) ||
     new Error((message = `gradebook collection does not exist `))
@@ -201,7 +202,7 @@ const resolvers = {
       let res = await context.db.collection("subject").updateOne(
         { _id: ObjectId(id) },
         {
-          $set:   updated_dict
+          $set: updated_dict
         }
       )
       context.loaders.subject.clear(id);
@@ -313,8 +314,8 @@ const resolvers = {
       return students.slice(offset, offset + limit).map(formatPerson);
     },
 
-    subject: (_, { id }, context) => {
-      return context.loaders.subject.load(id);
+    subject: (_, { emailid }, context) => {
+      return [context.loaders.subject.load(emailid)].flat();
     },
 
     subjects: async (_, { limit = 20, offset = 0, sort = null }, context) => {
@@ -335,7 +336,7 @@ const resolvers = {
     },
 
     gradebook: (_, { emailid }, context) => {
-      return context.loaders.gradebook.load(emailid);
+      return [context.loaders.gradebooks.load(emailid)].flat();
     },
 
     gradebooks: async (_, { limit = 20, offset = 0, sort = null }, context) => {
@@ -478,7 +479,7 @@ app.get("/handleGoogleRedirect", async (req, res) => {
     const accessToken = tokens.access_token;
     const refreshToken = tokens.refresh_token;
     res.redirect(
-      `https://basic-bank-370504.uw.r.appspot.com?accessToken=${accessToken}&refreshToken=${refreshToken}`
+      `https://useful-mile-371121.uw.r.appspot.com/?accessToken=${accessToken}&refreshToken=${refreshToken}`
     );
   });
 });

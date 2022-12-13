@@ -1,31 +1,46 @@
 import React, {useEffect, useState} from "react";
 import {useQuery,gql} from '@apollo/client'
 import {LOAD_GRADEBOOK} from '../GraphQL/Queries'
+import { LOAD_GRADEBOOKS } from "../GraphQL/Queries";
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Table from '@mui/material/Table';
-
+import TableContainer from '@mui/material/TableContainer';
 function GetGradebook({emailid}) {
 
-    const {error,loading,data} = useQuery(LOAD_GRADEBOOK,{ variables: { emailid } }); 
+
+  const isTeacher = sessionStorage.getItem("isTeacher");
+  
+  let {error,loading,data} = useQuery(LOAD_GRADEBOOK,{ variables: { emailid },skip: isTeacher===false });
+  
+  let {error1,loading1,data1} = useQuery(LOAD_GRADEBOOKS,{skip: isTeacher===true});
+  
+
     const [records,setRecords] = useState([]);
 
     useEffect(() => {
         console.log("getGradebook.js 2 | data", data);
         if (data) {
-          console.log("***********************************",data);   
-            setRecords(data.gradebooks);
-
-
+          console.log("**********************************",data);   
+            setRecords(data.gradebook);
         }
         if (error) {
             console.log(error);
         }
-
-
     }, [data])
+
+    useEffect(() => {
+      // console.log("getGradebook.js 2 | data", data);
+      if (data1) {
+        console.log("**********************************",data);   
+          setRecords(data1.gradebooks);
+      }
+      if (error) {
+          console.log(error);
+      }
+  }, [data1])
 
 
 

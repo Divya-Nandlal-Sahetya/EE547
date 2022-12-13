@@ -27,7 +27,7 @@ function GoogleAPI() {
 
   const link = from([
     errorLink,
-    new HttpLink({ uri: "https://basic-bank-370504.uw.r.appspot.com/graphql" })
+    new HttpLink({ uri: "http://localhost:8080/graphql" })
   ])
 
 

@@ -1,4 +1,9 @@
 type Query {
+
+  gradebook(emailid: String!): [gradebook]
+
+  gradebooks: [gradebook]
+
   teacher(id: ID!): Person
 
   teachers(limit: Int, offset: Int, sort: String): [Person]!
@@ -7,7 +12,7 @@ type Query {
 
   students(limit: Int, offset: Int, sort: String): [Person]!
 
-  gradebooks(emailid: String!): [gradebook]
+  subject (emailid: String!) : [Subject]
 }
 
 type Mutation {
@@ -72,4 +77,10 @@ type gradebook {
   subject: String
   grade: String
   gpa: Float
+}
+
+type Subject {
+  code: String
+  name: String
+  Instructor: String
 }
