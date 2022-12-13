@@ -239,7 +239,7 @@ export default function DashboardContent({
 									>
 										<ApolloProvider client={client}>
 											{/* <GetPersons emailid={emailid} isTeacher={isTeacher} /> */}
-											<GetGradebook emailid={emailid} isTeacher={isTeacher} />
+											<GetGradebook emailid={emailid}  />
 										</ApolloProvider>
 									</Paper>
 								</Grid>

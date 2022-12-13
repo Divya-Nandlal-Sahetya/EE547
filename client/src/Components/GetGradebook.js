@@ -12,7 +12,7 @@ import { Button, Card, CardContent } from "@mui/material";
 import Form from "./Form";
 import Popup from "reactjs-popup";
 
-function GetGradebook({ emailid,isTeacher }) {
+function GetGradebook({ emailid }) {
 	const { error, loading, data } = useQuery(LOAD_GRADEBOOK, {
 		variables: { emailid },
 	});

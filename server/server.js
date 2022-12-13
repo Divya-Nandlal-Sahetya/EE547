@@ -115,7 +115,6 @@ async function getGradebook(db, keys) {
     .collection("gradebook")
     .find({ emailid: { $in: keys } })
     .toArray();
-    console.log(gradebook)
   return (
     formatGradebook(gradebook) ||
     new Error((message = `gradebook collection does not exist `))
