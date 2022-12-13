@@ -13,6 +13,7 @@ import GetPersons from "./GetPersons.js";
 import SendMail from "./sendMail";
 
 import DashboardContent from './d';
+import { Box } from "@material-ui/core";
 
 
 function GoogleAPI() {
@@ -110,7 +111,7 @@ function GoogleAPI() {
   return (
 
 
-    <div >
+    <div>
       <DashboardContent
         signOut={signOut}
         createGoogleAuthLink={createGoogleAuthLink}

@@ -61,7 +61,7 @@ const config = require(mongo_file_path);
           loaders: {
             person: new DataLoader((keys) => getPersons(db, keys)),
             subject: new DataLoader((keys) => getSubjects(db, keys)),
-            gradebook: new DataLoader((keys) => getGradebook(db, keys)),
+            gradebooks: new DataLoader((keys) => getGradebook(db, keys)),
           },
         },
       };
@@ -403,6 +403,7 @@ function formatGradebook(gradebook) {
     subject: gradebook.subject,
     grade: gradebook.grade,
     gpa: gradebook.gpa,
+    emailid:gradebook.emailid
   };
   return res;
 }

@@ -5,7 +5,7 @@ mutation personCreate(
     $fname: String!
     $lname: String
     $gpa: Float
-    $email: String!
+    $emailid: String!
     $role: roleEnum
     )
     {
@@ -15,14 +15,14 @@ mutation personCreate(
         lname:$lname
         gpa:$gpa
         role:$role
-        email:$email
+        emailid:$emailid
         }
         ){
             fname
             lname
             gpa
             role
-            email
+            emailid
             name
         }
     }

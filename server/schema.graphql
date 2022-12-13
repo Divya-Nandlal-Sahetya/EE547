@@ -7,7 +7,7 @@ type Query {
 
   students(limit: Int, offset: Int, sort: String): [Person]!
 
-  gradebook(emailid: String!): [gradebook]
+  gradebooks(emailid: String!): [gradebook]
 }
 
 type Mutation {
