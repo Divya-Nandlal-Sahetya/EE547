@@ -11,7 +11,7 @@ import { Button, Card, CardContent } from "@mui/material";
 import Form from "./Form";
 import Popup from "reactjs-popup";
 
-function GetGradebook({ emailid,isTeacher }) {
+function GetGradebook({ emailid, isTeacher }) {
 	const { error, loading, data } = useQuery(LOAD_GRADEBOOK, {
 		variables: { emailid },
 	});
@@ -22,8 +22,8 @@ function GetGradebook({ emailid,isTeacher }) {
 	const closeModal = () => setOpen(false);
 
   useEffect(() => {
-    console.log('isTeacher: ', isTeacher)
-  }, [isTeacher])
+    console.log(' ------------------- >>>>isTeacher: ', isTeacher, 'emailid: ', emailid)
+  }, [isTeacher, emailid])
 	useEffect(() => {
 		console.log("getGradebook.js 2 | data", data);
 		if (data) {
@@ -35,16 +35,16 @@ function GetGradebook({ emailid,isTeacher }) {
 		}
 	}, [data]);
 
-	if (records.length === 0) {
-		return (
-			<div>
-				<h3>No records found</h3>
-			</div>
-		);
-	}
+	// if (records.length === 0) {
+	// 	return (
+	// 		<div>
+	// 			<h3>No records found</h3>
+	// 		</div>
+	// 	);
+	// }
 	return (
 		<>
-			{isTeacher ? (
+			{true ? (
 				<>
 					<Button
 						variant="outlined"
@@ -53,8 +53,8 @@ function GetGradebook({ emailid,isTeacher }) {
 					>
 						Add Record
 					</Button>
-
-					<Popup
+          <Form setOpen={setOpen} open={open} closeModal={closeModal}/>
+					{/* <Popup
 						open={open}
 						closeOnDocumentClick
 						onClose={closeModal}
@@ -63,8 +63,8 @@ function GetGradebook({ emailid,isTeacher }) {
 						<a className="close" onClick={closeModal}>
 							&times;
 						</a>
-						<Form />
-					</Popup>
+						<Form setOpen={setOpen} open={open} closeModal={closeModal}/>
+					</Popup> */}
 				</>
 			) : (
 				<></>

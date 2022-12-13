@@ -19,11 +19,12 @@ const { google } = require("googleapis");
 const oauth2Client = new google.auth.OAuth2(
   process.env.GOOGLE_CLIENT_ID,
   process.env.GOOGLE_CLIENT_SECRET,
-  "https://basic-bank-370504.uw.r.appspot.com/handleGoogleRedirect" // server redirect url handler
+  // "https://basic-bank-370504.uw.r.appspot.com/handleGoogleRedirect" // server redirect url handler
+  "http://localhost:8080/handleGoogleRedirect"
 );
 
 
-app.post("/createAuthLink", cors(), (req, res) => {
+app.post("http://localhost:8080/createAuthLink", cors(), (req, res) => {
   const url = oauth2Client.generateAuthUrl({
     access_type: "offline",
     scope: [
