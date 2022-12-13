@@ -5,6 +5,7 @@ import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
 import { Card, CardContent } from "@mui/material";
 import React, { useState, useEffect } from "react";
+import ExpandCard from './CollapseCard';
 const tokens = require("./tokens")
 
 
@@ -69,7 +70,7 @@ export function ShowEmailList({isLoggedIn, isGmailEnabled}){
               console.log(r.snippet)
               setlength(result => (result+1))
               let mailItem = {
-                body : (r.snippet.length > 75) ? r.snippet.substring(0, 75) + '...' : r.snippet,
+                body : r.snippet,
                 from : "",
                 date : ""
               }
@@ -105,36 +106,14 @@ export function ShowEmailList({isLoggedIn, isGmailEnabled}){
             :
 
             emails.map(e => {
+              console.log(e)
               return (
                 <>
-                  <Card style={{ marginBottom: '5px', marginTop: '5px'}}>
-                    <CardContent style={{ padding: 'unset'}}>
-                      <ListItem alignItems="flex-start">
-                        <ListItemText
-                          primary={e.from}
-                          secondary={
-                            <React.Fragment>
-                              <Typography
-                                sx={{ display: 'inline' }}
-                                component="h1"
-                                variant="caption"
-                                color="text.primary"
-                              >
-                                {e.date}
-                              </Typography>
-                              {` — ${e.message}`}
-                            </React.Fragment>
-                          }
-                        />
-                      </ListItem>
-                      
-                    </CardContent>
-                  </Card>
+                  <ExpandCard from={e.from} date={e.date} message={e.message} />
                   <Divider variant="inset" component="li" style={{ margin: 'unset' }} />
                 </>
               )
             })
-
 
           )
           :
@@ -144,38 +123,3 @@ export function ShowEmailList({isLoggedIn, isGmailEnabled}){
     </List>
   )
 }
-
-
-
-  //   <div>
-  //     {(isLoggedIn && isGmailEnabled && emails !== undefined && emails !== null) ?
-  //       emails.length === 0 ?
-  //         "No emails to Show"
-  //         : <Paper style={{ height: 350, width: '100%' }}>
-  //         <VirtualizedTable
-  //           rowCount={emails.length}
-  //           rowGetter={({ index }) => emails[index]}
-  //           columns={[
-  //             {
-  //               width: 150,
-  //               label: 'Date',
-  //               dataKey: 'date',
-  //             },
-  //             {
-  //               width: 200,
-  //               label: 'From',
-  //               dataKey: 'from',
-  //             },
-  //             {
-  //               width: 600,
-  //               height: 100,
-  //               label: 'Message',
-  //               dataKey: 'message'
-  //             },
-  //           ]}
-  //         />
-  //       </Paper>
-  //       : <></>}
-  //   </div>
-  // )
-// }

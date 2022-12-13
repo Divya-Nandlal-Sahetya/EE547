@@ -8,7 +8,7 @@
 // import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 // import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 // import { TimePicker } from '@mui/x-date-pickers/TimePicker';
-// // import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 // import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 // import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
 // import PropTypes from 'prop-types';
@@ -28,7 +28,7 @@
 // const tokens = require("./tokens")
 
 import { Button } from "@mui/material";
-import React, { useState, useEffect, useRef, Fragment } from "react";
+import React, { useState, useEffect, useRef, Fragment, useReducer } from "react";
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 import dayjs from 'dayjs';
@@ -50,6 +50,10 @@ import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import Typography from '@mui/material/Typography';
 import DateFnsUtils from '@date-io/date-fns'; // choose your lib
+import {
+//   DateTimePicker,
+  MuiPickersUtilsProvider,
+} from '@material-ui/pickers';
 const tokens = require("./tokens")
 
 
@@ -75,26 +79,31 @@ export function CreateEvent({isLoggedIn, setEventChanged}) {
     const [summary, setSummary] = useState('')
     const [description, setDescription] = useState('')
     const [location, setLocation] = useState('')
-    const [startDateTime, setStartDateTime] = useState('')
-    const [endDateTime, setEndDateTime] = useState('')
+    const [startDateTime, setStartDateTime] = useState(new Date())
+    const [endDateTime, setEndDateTime] = useState(new Date())
 
     const handleSubmit = (event) => {
         event.preventDefault()
         console.log("########################Create event: ", summary)
         //   this.CreateEvent(isLoggedIn,summary,description,location,startDateTime,endDateTime)
         console.log("create event: ", isLoggedIn, token)
+        console.log('summaryRef.current.value: ', summaryRef.current.value)
+        console.log('start.current.value: ', startTimeRef)
         if (token !== undefined && token !== '') {
 
+            let start = new Date(startDateTime).toISOString().substring(0, 16)
+            let end = new Date(endDateTime).toISOString().substring(0, 16)
+            console.log(start)
             let todo = {
-                "summary": summary,
-                "location": location,
-                "description": description,
+                "summary": summaryRef.current.value,
+                "location": locationRef.current.value,
+                "description": descriptionRef.current.value,
                 "start": {
-                  "dateTime": startDateTime + ":00-07:00",
+                  "dateTime": start + ":00-07:00",
                   "timeZone": "America/Los_Angeles",
                 },
                 "end": {
-                  "dateTime": endDateTime + ":00-07:00",
+                  "dateTime": end + ":00-07:00",
                   "timeZone": "America/Los_Angeles",
                 }
               };
@@ -130,10 +139,11 @@ export function CreateEvent({isLoggedIn, setEventChanged}) {
             width: '500px',
             
         },
-        '.MuiInputBase-input' :{
-            height: '2.1rem',
-            // padding: 'unset',
-        },
+        // '.MuiInputBase-input' :{
+        //     height: '2.1rem',
+        //     // padding: 'unset',
+        //     marginLeft: '5px',
+        // },
         '&.MuiOutlinedInput-root' : {
             height: '50px',
         },
@@ -184,8 +194,8 @@ export function CreateEvent({isLoggedIn, setEventChanged}) {
     const [descriptionReq, setDescriptonReq] = useState(false)
     const [summaryReq, setSummaryReq] = useState(false)
     const [locationReq, setLocationReq] = useState(false)
-    const [startTimeReq, setStartTimeReq] = useState(false)
-    const [endTimeReq, setEndTimeReq] = useState(false)
+    const [startTimeReq, setStartTimeReq] = useState(new Date())
+    const [endTimeReq, setEndTimeReq] = useState(new Date())
 
     const summaryRef = useRef()
     const descriptionRef = useRef()
@@ -197,6 +207,9 @@ export function CreateEvent({isLoggedIn, setEventChanged}) {
     const handleChange = (newValue) => {
         setValue(newValue);
     };
+
+    const dialogueRef = useRef();
+
     return (
         <>
            <Button variant="contained" className="button" onClick={() => setOpen(o => !o)}
@@ -204,12 +217,18 @@ export function CreateEvent({isLoggedIn, setEventChanged}) {
                 Create Event
             </Button>
             <BootstrapDialog
+                ref={(node) => {
+                    dialogueRef.current = node
+
+                    console.log(dialogueRef)
+                }}
                 onClose={() => setOpen(false)}
                 aria-labelledby="customized-dialog-title"
                 open={open}
             >
+
                 <BootstrapDialogTitle id="customized-dialog-title" onClose={() => setOpen(false)}>
-                    Modal title
+                    Create Event Form
                 </BootstrapDialogTitle>
                 <DialogContent dividers>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -217,76 +236,58 @@ export function CreateEvent({isLoggedIn, setEventChanged}) {
                             <TextField
                                 label="Summary"
                                 // onChange={e => setSummary(e.target.value)}
-                                ref={summaryRef}
+                                inputRef={summaryRef}
                                 required={summaryReq}
-                                values={summary}
+                                // values={summary}
                                 error={summaryReq}
                             />
                             <TextField
                                 label="Description"
                                 // values={description}
-                                ref={descriptionRef}
+                                inputRef={descriptionRef}
                                 // onChange={e => setDescription(e.target.value)}
                                 required={descriptionReq}
                                 error={descriptionReq} />
                             <TextField
                                 label="Location"
                                 // values={location}
-                                ref={locationRef}
+                                inputRef={locationRef}
                                 // onChange={e => setLocation(e.target.value)}
                                 required={locationReq}
                                 error={locationReq} />
-                            
-                            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                            <DateTimePicker
+                                label="Start Time"
+                                inputRef={startTimeRef}
+                                value={startDateTime}
+                                onChange={e => console.log(e)}
+                                renderInput={(params) => <TextField {...params} />}
+                                error={startTimeReq}
+                                required={startTimeReq} />
+                            <DateTimePicker
+                                label="End Time"
+                                inputRef={endDateTime}
+                                value={endDateTime}
+                                onChange={e => console.log(e)}
+                                renderInput={(params) => <TextField {...params} />}
+                                error={endTimeRef}
+                                required={endTimeRef} />
+                            {/* <MuiPickersUtilsProvider utils={DateFnsUtils}>
 
-                                <DateTimePicker value={selectedDate} onChange={handleDateChange} />
+                                <DateTimePicker value={startDateTime} onChange={setEndDateTime} />
                             </MuiPickersUtilsProvider>
                             <MuiPickersUtilsProvider utils={DateFnsUtils}>
 
-                                <DateTimePicker value={selectedDate} onChange={handleDateChange} />
-                            </MuiPickersUtilsProvider>
+                                <DateTimePicker value={endDateTime} onChange={setEndDateTime}/>
+                            </MuiPickersUtilsProvider> */}
                         </Stack>
                     </LocalizationProvider>
                 </DialogContent>
                 <DialogActions>
                     <Button autoFocus onClick={handleSubmit}>
-                        Save changes
+                        Create Event
                     </Button>
                 </DialogActions>
             </BootstrapDialog>
-            {/* <Popup open={open} closeOnDocumentClick onClose={closeModal} position="bottom left">
-                <a className="close" onClick={closeModal}>
-                    &times;
-                </a>
-                <div>
-                    <label htmlFor="summary">summary</label>
-                    <br />
-                    <input type="text" id="summary" value={summary} onChange={e => setSummary(e.target.value)} required/>
-                    <br />
-
-                    <label htmlFor="description">Description</label>
-                    <br />
-                    <textarea id="description" value={description} onChange={e => setDescription(e.target.value)} required/>
-                    <br />
-
-                    <label htmlFor="location">location</label>
-                    <br />
-                    <input type="text" id="location" value={location} onChange={e => setLocation(e.target.value)} />
-                    <br />
-
-                    <label htmlFor="startDateTime">Start Date time</label>
-                    <br />
-                    <input type="datetime-local" id="startDateTime" value={startDateTime} onChange={e => setStartDateTime(() => e.target.value)} required/>
-                    <br />
-
-                    <label htmlFor="startDateTime">StaEndrt Date time</label>
-                    <br />
-                    <input type="datetime-local" id="endDateTime" value={endDateTime} onChange={e => setEndDateTime(() => e.target.value)} required/>
-                    <br />
-
-                    <button type="submit" onClick={handleSubmit}> create event </button>
-                </div>
-            </Popup> */}
         </>
     );
     }
@@ -316,6 +317,7 @@ export function CreateEvent({isLoggedIn, setEventChanged}) {
 // import {
 //   DateTimePicker,
 //   MuiPickersUtilsProvider,
+// } from '@material-ui/pickers';
 // const tokens = require("./tokens")
 
 

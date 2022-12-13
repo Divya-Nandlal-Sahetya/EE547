@@ -31,10 +31,10 @@ function GetPersons({ emailid, isTeacher }) {
 	});
 	const [records, setRecords] = useState({});
 
-  // Popup state vars
-  const [open, setOpen] = useState(false);
-  const closeModal = () => setOpen(false);
-  
+	// Popup state vars
+	const [open, setOpen] = useState(false);
+	const closeModal = () => setOpen(false);
+
 	useEffect(() => {
 		if (data) {
 			setRecords(data.student);
@@ -55,8 +55,13 @@ function GetPersons({ emailid, isTeacher }) {
 		<>
 			{isTeacher ? (
 				<>
-					<Button variant="outlined"  onClick={() => setOpen(o => !o)}
-                style={{ marginBottom: '5px' }}>Add Record</Button>
+					<Button
+						variant="outlined"
+						onClick={() => setOpen((o) => !o)}
+						style={{ marginBottom: "5px" }}
+					>
+						Add Record
+					</Button>
 
 					<Popup
 						open={open}

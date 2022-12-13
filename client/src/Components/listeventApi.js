@@ -100,7 +100,10 @@ export function GetEvents({ isLoggedIn, selectedDate, eventChanged, setEventChan
     //   }
     // </div>
 
-    <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+    <List 
+      sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
+      style={{height: '500px', overflow: 'scroll'}}
+    >
       {
         isLoggedIn && events !== undefined && events !== null ?
           (events.length === 0 ?
