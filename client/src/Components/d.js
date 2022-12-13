@@ -29,6 +29,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import SendMail from "./sendMail";
 import { ShowEmailList } from "./showEmailList";
 import GetPersons from "./GetPersons";
+import GetGradebook from "./GetGradebook"
 import {
 	ApolloClient,
 	InMemoryCache,

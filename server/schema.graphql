@@ -50,7 +50,6 @@ type Person {
   role: roleEnum
   gpa: Float
   emailid: String
-
 }
 
 input gradebookCreateInput {

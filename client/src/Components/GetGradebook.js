@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {useQuery,gql} from '@apollo/client'
-import {LOAD_STUDENT, LOAD_STUDENTS} from '../GraphQL/Queries'
+import {LOAD_GRADEBOOK} from '../GraphQL/Queries'
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import Divider from '@mui/material/Divider';
@@ -21,20 +21,20 @@ import Table from '@mui/material/Table';
 
 
 
-function GetPersons({emailid}) {
+function GetGradebook({emailid}) {
 
 
 
     const {error,loading,data} = useQuery(LOAD_GRADEBOOK,{ variables: { emailid } }); 
-    const [records,setRecords] = useState({});
+    const [records,setRecords] = useState([]);
 
 
       
     useEffect(() => {
         console.log("getGradebook.js 2 | data", data);
         if (data) {
-          console.log("*******************************************",data.student);   
-            setRecords(data.student);
+          console.log("***********************************",data);   
+            setRecords(data.gradebooks);
 
 
         }
@@ -59,25 +59,29 @@ function GetPersons({emailid}) {
       <Table  aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell align="auto">Name</TableCell>
-            <TableCell align="auto">Email</TableCell>
+            <TableCell align="auto">Subject</TableCell>
+            {/* <TableCell align="auto">Email</TableCell> */}
             <TableCell align="auto">GPA</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-        <TableRow
-              key={records.name}
+
+          { records.map( record => {
+            return (
+              <TableRow
+              key={record.subject}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}  
             >
-              <TableCell align="auto">{records.name}</TableCell>
-              <TableCell align="auto">{records.gpa}</TableCell>
+              <TableCell align="auto">{record.subject}</TableCell>
+              <TableCell align="auto">{record.gpa}</TableCell>
             </TableRow>
 
-
+            )
+          })}
         </TableBody>
       </Table>
       )
     }
 
 
-export default GetPersons;
+export default GetGradebook;

@@ -112,6 +112,7 @@ async function getGradebook(db, keys) {
     .collection("gradebook")
     .find({ emailid: { $in: keys } })
     .toArray();
+    console.log(gradebook);
   return (
     formatGradebook(gradebook) ||
     new Error((message = `gradebook collection does not exist `))
@@ -331,8 +332,8 @@ const resolvers = {
       return subjects.slice(offset, offset + limit).map(formatSubject);
     },
 
-    gradebook: (_, { id }, context) => {
-      return context.loaders.gradebook.load(id);
+    gradebook: (_, { emailid }, context) => {
+      return context.loaders.gradebook.load(emailid);
     },
 
     gradebooks: async (_, { limit = 20, offset = 0, sort = null }, context) => {

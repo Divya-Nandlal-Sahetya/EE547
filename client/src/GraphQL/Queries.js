@@ -12,11 +12,11 @@ export const LOAD_STUDENTS = gql`
 `;
 
 export const LOAD_GRADEBOOK = gql`
-  query {
-    gradebook(limit: 10) {
-      subject
-      grade
+query ($emailid: String!) {
+    gradebooks(emailid: $emailid) {
+      emailid
       gpa
+      subject
     }
   }
 `;
