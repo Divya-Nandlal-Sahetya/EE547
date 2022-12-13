@@ -50,10 +50,6 @@ import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import Typography from '@mui/material/Typography';
 import DateFnsUtils from '@date-io/date-fns'; // choose your lib
-import {
-  DateTimePicker,
-  MuiPickersUtilsProvider,
-} from '@material-ui/pickers';
 const tokens = require("./tokens")
 
 
@@ -320,7 +316,6 @@ export function CreateEvent({isLoggedIn, setEventChanged}) {
 // import {
 //   DateTimePicker,
 //   MuiPickersUtilsProvider,
-// } from '@material-ui/pickers';
 // const tokens = require("./tokens")
 
 

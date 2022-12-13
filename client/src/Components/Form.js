@@ -38,7 +38,7 @@ function Form() {
 			/>
 
 			<input
-				type="Number"
+				type="float"
 				placeholder="GPA"
 				onChange={(e) => {
 					setGPA(e.target.value);

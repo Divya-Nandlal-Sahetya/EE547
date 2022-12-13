@@ -30,10 +30,13 @@ const tokenExpired = () => {
   return false; // valid token
 };
 
+// https://basic-bank-370504.uw.r.appspot.com
+// https://basic-bank-370504.uw.r.appspot.com/graphql
+
 const getValidTokenFromServer = async (refreshToken) => {
   // get new token from server with refresh token
   try {
-    const request = await fetch("http://localhost:8080/getValidToken", {
+    const request = await fetch("https://basic-bank-370504.uw.r.appspot.com/getValidToken", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

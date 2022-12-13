@@ -19,12 +19,13 @@ const config = require(mongo_file_path);
   host = config.host || "localhost";
   port = config.port || 27017;
   opts = config.opts || { useUnifiedTopology: true };
-  const connection = new MongoClient("mongodb://" + host + ":" + port, opts);
+  const connection = new MongoClient("mongodb+srv://admin1:admin1@" + host , opts);
 
   database = config.db || "ee547_project";
-
   await connection.connect();
+  console.log("Connected");
   db = connection.db(database);
+
 
   const typeDefs = fs.readFileSync(process.env.SCHEMA_GRAPHQL).toString("utf-8");
 
@@ -73,8 +74,9 @@ const config = require(mongo_file_path);
   if (!valid_json) {
     process.exit(2);
   } else {
-    app.listen(node_port);
-    console.log("GraphQL API server running at http://localhost:8080/graphql");
+    if (require.main==module)
+   { app.listen(node_port);}
+    console.log("GraphQL API server running");
   }
 })();
 
@@ -440,7 +442,7 @@ const { google } = require("googleapis");
 const oauth2Client = new google.auth.OAuth2(
   process.env.GOOGLE_CLIENT_ID,
   process.env.GOOGLE_CLIENT_SECRET,
-  "http://localhost:8080/handleGoogleRedirect" // server redirect url handler
+  "https://basic-bank-370504.uw.r.appspot.com/handleGoogleRedirect" // server redirect url handler
 );
 
 
@@ -476,7 +478,7 @@ app.get("/handleGoogleRedirect", async (req, res) => {
     const accessToken = tokens.access_token;
     const refreshToken = tokens.refresh_token;
     res.redirect(
-      `http://localhost:3000?accessToken=${accessToken}&refreshToken=${refreshToken}`
+      `https://basic-bank-370504.uw.r.appspot.com?accessToken=${accessToken}&refreshToken=${refreshToken}`
     );
   });
 });
@@ -506,3 +508,5 @@ app.post("/getValidToken", async (req, res) => {
     res.json({ error: error.message });
   }
 });
+
+module.exports = app
