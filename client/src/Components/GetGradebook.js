@@ -121,32 +121,6 @@ function GetGradebook({ emailid }) {
 	else{
 		return (
 			<>
-			{true ? (
-				<>
-					<Button
-						variant="outlined"
-						onClick={() => setOpen((o) => !o)}
-						style={{ marginBottom: "5px" }}
-					>
-						Add Record
-					</Button>
-          <Form setOpen={setOpen} open={open} closeModal={closeModal}/>
-					{/* <Popup
-						open={open}
-						closeOnDocumentClick
-						onClose={closeModal}
-						position="bottom left"
-					>
-						<a className="close" onClick={closeModal}>
-							&times;
-						</a>
-						<Form setOpen={setOpen} open={open} closeModal={closeModal}/>
-					</Popup> */}
-				</>
-			) : (
-				<></>
-			)}
-
 			<TableContainer
 				sx={{
 					height: 200,
