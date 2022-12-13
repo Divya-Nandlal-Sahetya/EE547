@@ -19,29 +19,32 @@ const { google } = require("googleapis");
 const oauth2Client = new google.auth.OAuth2(
   process.env.GOOGLE_CLIENT_ID,
   process.env.GOOGLE_CLIENT_SECRET,
-  // "https://basic-bank-370504.uw.r.appspot.com/handleGoogleRedirect" // server redirect url handler
-  "http://localhost:8080/handleGoogleRedirect"
+  // "https://basic-bank-370504.uw.r.appspot.com//handleGoogleRedirect" // server redirect url handler
+  "https://basic-bank-370504.uw.r.appspot.com/handleGoogleRedirect"
 );
 
-
-app.post("http://localhost:8080/createAuthLink", cors(), (req, res) => {
-  const url = oauth2Client.generateAuthUrl({
-    access_type: "offline",
-    scope: [
-      "https://www.googleapis.com/auth/userinfo.email",
-      //calendar api scopes]
-      "https://www.googleapis.com/auth/calendar",
-      //gmail
-      "profile",
-      "https://mail.google.com/",
-      //'https://www.googleapis.com/auth/gmail.metadata',
-      "https://www.googleapis.com/auth/gmail.modify",
-      "https://www.googleapis.com/auth/gmail.readonly"
-    ],
-    prompt: "consent",
-  });
-  res.send({ url });
-});
+app.post(
+  "https://basic-bank-370504.uw.r.appspot.com/createAuthLink",
+  cors(),
+  (req, res) => {
+    const url = oauth2Client.generateAuthUrl({
+      access_type: "offline",
+      scope: [
+        "https://www.googleapis.com/auth/userinfo.email",
+        //calendar api scopes]
+        "https://www.googleapis.com/auth/calendar",
+        //gmail
+        "profile",
+        "https://mail.google.com/",
+        //'https://www.googleapis.com/auth/gmail.metadata',
+        "https://www.googleapis.com/auth/gmail.modify",
+        "https://www.googleapis.com/auth/gmail.readonly",
+      ],
+      prompt: "consent",
+    });
+    res.send({ url });
+  }
+);
 
 app.get("/handleGoogleRedirect", async (req, res) => {
   // get code from url
