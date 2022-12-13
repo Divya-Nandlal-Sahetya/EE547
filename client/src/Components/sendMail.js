@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Popup from 'reactjs-popup';
 //import CloseIcon from "@material-ui/icons/Close";
-import { Button } from "@mui/material";
+import { Button } from "@material-ui/core";
 import { useForm } from "react-hook-form";
 import { Buffer } from 'buffer';
 //import { useDispatch } from "react-redux";
@@ -121,13 +121,12 @@ function SendMail({isLoggedIn}) {
                   <div>
                   Body:
               </div>
-                  <input
+                  <textarea rows="5" cols="60"
                       name="message"
                       placeholder="Message"
                       type="text"
                       className="sendMail-message"
-                      size="auto"
-                      {...register("message", { required: true })} />
+                      {...register("message", { required: true })}></textarea>
                   {errors.message && (
                       <p className="sendMail-error">Message is Required!</p>
                   )}
