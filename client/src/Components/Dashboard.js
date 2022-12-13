@@ -14,7 +14,6 @@ import {
 	from,
 } from "@apollo/client";
 import { onError } from "@apollo/client/link/error";
-import GetPersons from "./GetPersons.js";
 
 import SendMail from "./sendMail";
 

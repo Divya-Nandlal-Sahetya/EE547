@@ -21,7 +21,6 @@ function GetGradebook({ emailid }) {
 
 	const res1 = useQuery(LOAD_GRADEBOOK, {
 		variables: { emailid },
-		skip: isTeacher == true,
 	});
 
 	const res2 = useQuery(LOAD_GRADEBOOKS);
@@ -55,7 +54,7 @@ function GetGradebook({ emailid }) {
 	// 	);
 	// }
 
-	if (isTeacher == "true") {
+	if (isTeacher == true) {
 		return (
 			<>
 				{true ? (
