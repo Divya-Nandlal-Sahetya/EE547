@@ -53,8 +53,74 @@ function GetGradebook({ emailid }) {
 	// 		</div>
 	// 	);
 	// }
+
+	if (isTeacher == "true") {
 	return (
 		<>
+			{true ? (
+				<>
+					<Button
+						variant="outlined"
+						onClick={() => setOpen((o) => !o)}
+						style={{ marginBottom: "5px" }}
+					>
+						Add Record
+					</Button>
+          <Form setOpen={setOpen} open={open} closeModal={closeModal}/>
+					{/* <Popup
+						open={open}
+						closeOnDocumentClick
+						onClose={closeModal}
+						position="bottom left"
+					>
+						<a className="close" onClick={closeModal}>
+							&times;
+						</a>
+						<Form setOpen={setOpen} open={open} closeModal={closeModal}/>
+					</Popup> */}
+				</>
+			) : (
+				<></>
+			)}
+
+			<TableContainer
+				sx={{
+					height: 200,
+				}}
+			>
+				<Table stickyHeader aria-label="sticky table">
+					<TableHead>
+						<TableRow>
+							<TableCell align="auto">Email</TableCell>
+							<TableCell align="auto">Subject</TableCell>
+							<TableCell align="auto">GPA</TableCell>
+							<TableCell align="auto">Grade</TableCell>
+							
+						</TableRow>
+					</TableHead>
+					<TableBody>
+						{records.map((record) => {
+							return (
+								<TableRow
+									key={record.subject}
+									sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+								>
+									<TableCell align="auto">{record.emailid}</TableCell>
+									<TableCell align="auto">{record.subject}</TableCell>
+									<TableCell align="auto">{record.gpa}</TableCell>
+									<TableCell align="auto">{record.grade}</TableCell>
+								</TableRow>
+							);
+						})}
+					</TableBody>
+				</Table>
+			</TableContainer>
+		</>
+	);
+					}
+	else{
+		return (
+			<>
 			{true ? (
 				<>
 					<Button
@@ -92,6 +158,7 @@ function GetGradebook({ emailid }) {
 							<TableCell align="auto">Subject</TableCell>
 							<TableCell align="auto">GPA</TableCell>
 							<TableCell align="auto">Grade</TableCell>
+							
 						</TableRow>
 					</TableHead>
 					<TableBody>
@@ -111,7 +178,9 @@ function GetGradebook({ emailid }) {
 				</Table>
 			</TableContainer>
 		</>
-	);
+		)
+
+	}
 }
 
 export default GetGradebook;
