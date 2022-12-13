@@ -493,7 +493,7 @@ app.get("/handleGoogleRedirect", async (req, res) => {
     const accessToken = tokens.access_token;
     const refreshToken = tokens.refresh_token;
     res.redirect(
-      `http://localhost:3000/?accessToken=${accessToken}&refreshToken=${refreshToken}`
+      `https://useful-mile-371121.uw.r.appspot.com/?accessToken=${accessToken}&refreshToken=${refreshToken}`
     );
   });
 });

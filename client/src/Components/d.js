@@ -120,7 +120,7 @@ export default function DashboardContent({
 	const [open, setOpen] = React.useState(true);
 
 	const [isTeacher, setIsTeacher] = React.useState(() =>
-		sessionStorage.getItem("isTeacher") || true
+		sessionStorage.getItem("isTeacher") || false
 	);
 
 	const toggleDrawer = () => {
