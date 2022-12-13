@@ -1,21 +1,9 @@
-//import { TableCell } from "@material-ui/core";
-//import Paper from '@mui/material/Paper';
-import PropTypes from 'prop-types';
-import clsx from 'clsx';
-import { withStyles } from '@material-ui/core/styles';
-import TableCell from '@material-ui/core/TableCell';
-import Paper from '@material-ui/core/Paper';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import Divider from '@mui/material/Divider';
 import ListItemText from '@mui/material/ListItemText';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
-import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 import { Card, CardContent } from "@mui/material";
-import IconButton from '@mui/material/IconButton';
-import DeleteIcon from '@mui/icons-material/Delete';
-import { AutoSizer, Column, Table } from 'react-virtualized';
 import React, { useState, useEffect } from "react";
 const tokens = require("./tokens")
 

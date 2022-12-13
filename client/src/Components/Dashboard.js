@@ -13,7 +13,6 @@ import GetPersons from "./GetPersons.js";
 import SendMail from "./sendMail";
 
 import DashboardContent from './d';
-import { Box } from "@material-ui/core";
 
 
 function GoogleAPI() {
@@ -28,7 +27,7 @@ function GoogleAPI() {
 
   const link = from([
     errorLink,
-    new HttpLink({ uri: "http://localhost:8080/graphql" })
+    new HttpLink({ uri: "https://basic-bank-370504.uw.r.appspot.com/graphql" })
   ])
 
 
@@ -52,7 +51,7 @@ function GoogleAPI() {
 
   const createGoogleAuthLink = async () => {
     try {
-      const request = await fetch("http://localhost:8080/createAuthLink", {
+      const request = await fetch("https://basic-bank-370504.uw.r.appspot.com/createAuthLink", {
         method: "POST",
       });
       const response = await request.json();

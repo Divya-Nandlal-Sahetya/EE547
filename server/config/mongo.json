@@ -1,1 +1,1 @@
-{"host":"localhost","port":"27017","db":"ee547_project","opts":{"useUnifiedTopology":true}}
+{"host":"cluster0.bqou7vl.mongodb.net","port":"","db":"ee547_project","opts":{"useUnifiedTopology":true}}
