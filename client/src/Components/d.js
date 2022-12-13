@@ -29,6 +29,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import SendMail from "./sendMail";
 import { ShowEmailList } from "./showEmailList";
 import GetPersons from "./GetPersons"
+import GetGradebook from "./GetGradebook"
 import { ApolloClient, InMemoryCache, ApolloProvider, HttpLink, from } from '@apollo/client';
 function Copyright(props) {
   return (
@@ -218,6 +219,7 @@ export default function DashboardContent({
                                 >
        <ApolloProvider client={client}>
           <GetPersons emailid={emailid}/>
+          <GetGradebook emailid={emailid}/>
         </ApolloProvider>
      
                                 </Paper>

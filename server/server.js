@@ -61,7 +61,7 @@ const config = require(mongo_file_path);
           loaders: {
             person: new DataLoader((keys) => getPersons(db, keys)),
             subject: new DataLoader((keys) => getSubjects(db, keys)),
-            gradebook: new DataLoader((keys) => getGradebook(db, keys)),
+            gradebooks: new DataLoader((keys) => getGradebook(db, keys)),
           },
         },
       };
@@ -112,6 +112,7 @@ async function getGradebook(db, keys) {
     .collection("gradebook")
     .find({ emailid: { $in: keys } })
     .toArray();
+    console.log(gradebook);
   return (
     formatGradebook(gradebook) ||
     new Error((message = `gradebook collection does not exist `))
@@ -331,8 +332,8 @@ const resolvers = {
       return subjects.slice(offset, offset + limit).map(formatSubject);
     },
 
-    gradebook: (_, { id }, context) => {
-      return context.loaders.gradebook.load(id);
+    gradebook: (_, { emailid }, context) => {
+      return context.loaders.gradebook.load(emailid);
     },
 
     gradebooks: async (_, { limit = 20, offset = 0, sort = null }, context) => {
@@ -403,6 +404,7 @@ function formatGradebook(gradebook) {
     subject: gradebook.subject,
     grade: gradebook.grade,
     gpa: gradebook.gpa,
+    emailid:gradebook.emailid
   };
   return res;
 }
