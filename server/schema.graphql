@@ -15,7 +15,7 @@ type Mutation {
   personDelete(id: ID!): Boolean
   personUpdate(id: ID!, personInput: personUpdateInput): Person
 
-  gradebookCreate(gradebookInput: gradebookCreateInput): gradebook
+  gradebookCreate(gradebookInput: gradebookCreateInput): [gradebook]
   gradebookDelete(id: ID!): Boolean
   gradebookUpdate(id: ID!, gradebookInput: gradebookUpdateInput): gradebook
 }
@@ -31,7 +31,7 @@ input personCreateInput {
   lname: String
   role: roleEnum
   gpa: Float
-  emailid: String!
+  emailid: String
 }
 
 input personUpdateInput {
@@ -56,7 +56,7 @@ input gradebookCreateInput {
   subject: String
   grade: String
   gpa: Float
-  emailid: String!
+  emailid: String
 }
 
 input gradebookUpdateInput {
@@ -68,7 +68,7 @@ input gradebookUpdateInput {
 }
 
 type gradebook {
-  emailid: String!
+  emailid: String
   subject: String
   grade: String
   gpa: Float

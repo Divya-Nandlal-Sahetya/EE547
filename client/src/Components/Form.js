@@ -1,23 +1,22 @@
 import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
-import { CREATE_PERSON } from "../GraphQL/Mutations";
+import { CREATE_GRADEBOOK } from "../GraphQL/Mutations";
 
 function Form() {
-	const [fname, setFName] = useState("");
-	const [lname, setLName] = useState("");
-	const [gpa, setGPA] = useState("");
-	const [role, setRole] = useState("");
-    const [email, setEmail] = useState("");
-	const [personCreate, { error }] = useMutation(CREATE_PERSON);
+	const [subject, setSubject] = useState();
+	const [gpa, setGPA] = useState();
+    const [email, setEmail] = useState();
+	const [grade,setGrade] = useState();
+	const [gradeBookCreate, { error }] = useMutation(CREATE_GRADEBOOK);
 
-	const addPerson = () => {
-		personCreate({
+
+	const addGradebook = () => {
+		gradeBookCreate({
 			variables: {
-				fname: fname,
-				lname: lname,
 				gpa: Number(gpa),
-				role: role,
 				emailid: email,
+				subject: subject,
+				grade: grade
 			},
 		});
 		if (error) {
@@ -25,46 +24,42 @@ function Form() {
 		}
 	};
 
+
+	console.log(subject,gpa,email,grade)
 	return (
+		
 		<div>
 			<input
 				type="text"
-				placeholder="First Name"
+				placeholder="Subject"
 				onChange={(e) => {
-					setFName(e.target.value);
+					setSubject(e.target.value);
 				}}
 			/>
 
 			<input
-				type="text"
-				placeholder="Last Name"
-				onChange={(e) => {
-					setLName(e.target.value);
-				}}
-			/>
-
-			<input
-				type="text"
+				type="Number"
 				placeholder="GPA"
 				onChange={(e) => {
 					setGPA(e.target.value);
 				}}
 			/>
+
+			<input
+				type="text"
+				placeholder="Grade"
+				onChange={(e) => {
+					setGrade(e.target.value);
+				}}
+			/>
 			<input
 				type="email"
-				placeholder="email"
+				placeholder="EmailID"
 				onChange={(e) => {
 					setEmail(e.target.value);
 				}}
 			/>
-			<input
-				type="enum"
-				placeholder="role"
-				onChange={(e) => {
-					setRole(e.target.value);
-				}}
-			/>
-			<button onClick={addPerson}>Create User</button>
+			<button onClick={addGradebook}>Create Entry in gradebook</button>
 		</div>
 	);
 }
