@@ -9,13 +9,9 @@ import Table from '@mui/material/Table';
 
 function GetGradebook({emailid}) {
 
-
-
     const {error,loading,data} = useQuery(LOAD_GRADEBOOK,{ variables: { emailid } }); 
     const [records,setRecords] = useState([]);
 
-
-      
     useEffect(() => {
         console.log("getGradebook.js 2 | data", data);
         if (data) {
@@ -41,8 +37,12 @@ function GetGradebook({emailid}) {
     )
   }
   return (
-    
-      <Table  aria-label="simple table">
+    <TableContainer
+  sx={{
+    height: 200    
+  }}
+>
+      <Table stickyHeader aria-label="sticky table">
         <TableHead>
           <TableRow>
             <TableCell align="auto">Subject</TableCell>
@@ -67,6 +67,7 @@ function GetGradebook({emailid}) {
           })}
         </TableBody>
       </Table>
+      </TableContainer>
       )
     }
 
