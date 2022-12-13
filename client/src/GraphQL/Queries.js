@@ -12,7 +12,7 @@ export const LOAD_STUDENTS = gql`
 `;
 
 export const LOAD_GRADEBOOK = gql`
-query ($emailid: String!) {
+  query ($emailid: String!) {
     gradebook(emailid: $emailid) {
       emailid
       gpa
@@ -22,8 +22,8 @@ query ($emailid: String!) {
   }
 `;
 
-export const LOAD_GRADEBOOKS =  gql`
-query  {
+export const LOAD_GRADEBOOKS = gql`
+  query {
     gradebooks {
       emailid
       gpa
@@ -77,5 +77,3 @@ export const LOAD_COURSE = gql`
     }
   }
 `;
-
-

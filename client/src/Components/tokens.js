@@ -31,7 +31,7 @@ const tokenExpired = () => {
 };
 
 // https://basic-bank-370504.uw.r.appspot.com
-// http://localhost:8080/graphql
+// https://basic-bank-370504.uw.r.appspot.com/graphql
 
 const getValidTokenFromServer = async (refreshToken) => {
   // get new token from server with refresh token

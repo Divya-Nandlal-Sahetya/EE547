@@ -13,104 +13,38 @@ import Form from "./Form";
 import Popup from "reactjs-popup";
 
 function GetGradebook({ emailid }) {
-	const { error, loading, data } = useQuery(LOAD_GRADEBOOK, {
-		variables: { emailid },
-	});
-
-	const [records, setRecords] = useState([]);
-  // Popup state vars
+	// Popup state vars
 	const [open, setOpen] = useState(false);
 	const closeModal = () => setOpen(false);
-function GetGradebook({emailid}) {
 
+	const isTeacher = sessionStorage.getItem("isTeacher");
 
-  const isTeacher = sessionStorage.getItem("isTeacher");
-  
-  let {error,loading,data} = useQuery(LOAD_GRADEBOOK,{ variables: { emailid },skip: isTeacher===false });
-  
-  let {error1,loading1,data1} = useQuery(LOAD_GRADEBOOKS,{skip: isTeacher===true});
-  
+	const res1 = useQuery(LOAD_GRADEBOOK, {
+		variables: { emailid },
+		skip: isTeacher == true,
+	});
 
-    const [records,setRecords] = useState([]);
+	const res2 = useQuery(LOAD_GRADEBOOKS);
 
-    useEffect(() => {
-        console.log("getGradebook.js 2 | data", data);
-        if (data) {
-          console.log("**********************************",data);   
-            setRecords(data.gradebook);
-        }
-        if (error) {
-            console.log(error);
-        }
-    }, [data])
+	const [records, setRecords] = useState([]);
 
-    useEffect(() => {
-      // console.log("getGradebook.js 2 | data", data);
-      if (data1) {
-        console.log("**********************************",data);   
-          setRecords(data1.gradebooks);
-      }
-      if (error) {
-          console.log(error);
-      }
-  }, [data1])
-
-
-
-  if (records.length === 0){
-    return (
-      <div>
-        <h3>No records found</h3>
-      </div>
-    )
-  }
-  return (
-    <TableContainer
-  sx={{
-    height: 200    
-  }}
->
-      <Table stickyHeader aria-label="sticky table">
-        <TableHead>
-          <TableRow>
-            <TableCell align="auto">Subject</TableCell>
-            <TableCell align="auto">GPA</TableCell>
-            <TableCell align="auto">Grade</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-
-          { records.map( record => {
-            return (
-              <TableRow
-              key={record.subject}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}  
-            >
-              <TableCell align="auto">{record.subject}</TableCell>
-              <TableCell align="auto">{record.gpa}</TableCell>
-              <TableCell align="auto">{record.grade}</TableCell>
-            </TableRow>
-
-            )
-          })}
-        </TableBody>
-      </Table>
-      </TableContainer>
-      )
-    }
-  useEffect(() => {
-    console.log('isTeacher: ', isTeacher)
-  }, [isTeacher])
 	useEffect(() => {
-		console.log("getGradebook.js 2 | data", data);
-		if (data) {
-			console.log("***********************************", data);
-			setRecords(data.gradebooks);
+		if (res1.data) {
+			setRecords(res1.gradebook);
 		}
-		if (error) {
-			console.log(error);
+		if (res1.error) {
+			console.log(res1.error);
 		}
-	}, [data]);
+	}, [res1]);
+
+	useEffect(() => {
+		if (res2.data) {
+			setRecords(res2.data.gradebooks);
+		}
+		if (res2.error) {
+			console.log(res2.error);
+		}
+	}, [res2]);
 
 	if (records.length === 0) {
 		return (
