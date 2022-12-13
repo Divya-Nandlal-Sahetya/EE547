@@ -17,6 +17,7 @@ query ($emailid: String!) {
       emailid
       gpa
       subject
+      grade
     }
   }
 `;

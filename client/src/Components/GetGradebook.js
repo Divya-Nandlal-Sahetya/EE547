@@ -1,25 +1,11 @@
 import React, {useEffect, useState} from "react";
 import {useQuery,gql} from '@apollo/client'
 import {LOAD_GRADEBOOK} from '../GraphQL/Queries'
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import Divider from '@mui/material/Divider';
-import ListItemText from '@mui/material/ListItemText';
-import Typography from '@mui/material/Typography';
-import { Card, CardContent } from "@mui/material";
-import { ApolloClient, InMemoryCache, ApolloProvider, HttpLink, from } from '@apollo/client';
-import { onError } from "@apollo/client/link/error"
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import Paper from "@mui/material/Paper";
 import Table from '@mui/material/Table';
-
-
-
-
 
 function GetGradebook({emailid}) {
 
@@ -60,8 +46,8 @@ function GetGradebook({emailid}) {
         <TableHead>
           <TableRow>
             <TableCell align="auto">Subject</TableCell>
-            {/* <TableCell align="auto">Email</TableCell> */}
             <TableCell align="auto">GPA</TableCell>
+            <TableCell align="auto">Grade</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -74,6 +60,7 @@ function GetGradebook({emailid}) {
             >
               <TableCell align="auto">{record.subject}</TableCell>
               <TableCell align="auto">{record.gpa}</TableCell>
+              <TableCell align="auto">{record.grade}</TableCell>
             </TableRow>
 
             )

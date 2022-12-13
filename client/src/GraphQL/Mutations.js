@@ -27,3 +27,27 @@ mutation personCreate(
         }
     }
 `
+
+export const CREATE_GRADEBOOK = gql`
+mutation gradebookCreate(
+    $subject: String
+    $grade: String
+    $gpa: Float
+    $emailid: String!
+    )
+    {
+    gradebookCreate(
+        gradebookInput:{
+        subject: $subject
+        grade: $grade
+        gpa: $gpa
+        emailid: $emailid
+        }
+        ){
+            emailid
+            gpa
+            subject
+            grade
+        }
+    }
+`

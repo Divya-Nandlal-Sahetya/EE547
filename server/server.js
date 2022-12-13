@@ -112,7 +112,7 @@ async function getGradebook(db, keys) {
     .collection("gradebook")
     .find({ emailid: { $in: keys } })
     .toArray();
-    console.log(gradebook);
+    //console.loggradebook)
   return (
     formatGradebook(gradebook) ||
     new Error((message = `gradebook collection does not exist `))
@@ -134,7 +134,8 @@ const resolvers = {
         emailid: personInput.emailid?personInput.emailid:null,
       };
       let res = await context.db.collection("person").insertOne(person);
-      return context.loaders.person.load(res.insertedId)  ;
+      context.loaders.person.clear(personInput.emailid);
+      return context.loaders.person.load(personInput.emailid)  ;
     },
 
     personDelete: async (_, { id }, context) => {
@@ -207,15 +208,14 @@ const resolvers = {
 
     gradebookCreate: async (_, { gradebookInput }, context) => {
       let gradebook = {
-        student_id: ObjectId(gradebookInput.student_id),
         subject: gradebookInput.subject,
         grade: gradebookInput.grade,
         gpa: gradebookInput.gpa,
+        emailid:gradebookInput.emailid
 
       };
       let res = await context.db.collection("gradebook").insertOne(gradebook);
-      console.log(res.insertedId);
-      return context.loaders.gradebook.load(res.insertedId);
+      return context.loaders.gradebooks.load(gradebookInput.emailid);
     },
 
     gradebookDelete: async (_, { id }, context) => {
@@ -466,11 +466,11 @@ app.post("/createAuthLink", cors(), (req, res) => {
 app.get("/handleGoogleRedirect", async (req, res) => {
   // get code from url
   const code = req.query.code;
-  console.log("server 36 | code", code);
+  //console.log"server 36 | code", code);
   // get access token
   oauth2Client.getToken(code, (err, tokens) => {
     if (err) {
-      console.log("server 39 | error", err);
+      //console.log"server 39 | error", err);
       throw new Error("Issue with Login", err.message);
     }
     const accessToken = tokens.access_token;
@@ -497,7 +497,7 @@ app.post("/getValidToken", async (req, res) => {
     });
 
     const data = await request.json();
-    console.log("server 74 | data", data.access_token);
+    //console.log"server 74 | data", data.access_token);
 
     res.json({
       accessToken: data.access_token,
