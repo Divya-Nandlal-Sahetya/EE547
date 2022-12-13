@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useQuery, gql } from "@apollo/client";
+import { LOAD_GRADEBOOKS } from "../GraphQL/Queries";
 import { LOAD_GRADEBOOK } from "../GraphQL/Queries";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -11,29 +12,39 @@ import { Button, Card, CardContent } from "@mui/material";
 import Form from "./Form";
 import Popup from "reactjs-popup";
 
-function GetGradebook({ emailid, isTeacher }) {
-	const { error, loading, data } = useQuery(LOAD_GRADEBOOK, {
-		variables: { emailid },
-	});
-
-	const [records, setRecords] = useState([]);
-  // Popup state vars
+function GetGradebook({ emailid }) {
+	// Popup state vars
 	const [open, setOpen] = useState(false);
 	const closeModal = () => setOpen(false);
 
-  useEffect(() => {
-    console.log(' ------------------- >>>>isTeacher: ', isTeacher, 'emailid: ', emailid)
-  }, [isTeacher, emailid])
+	const isTeacher = sessionStorage.getItem("isTeacher");
+
+	const res1 = useQuery(LOAD_GRADEBOOK, {
+		variables: { emailid },
+		skip: isTeacher == true,
+	});
+
+	const res2 = useQuery(LOAD_GRADEBOOKS);
+
+	const [records, setRecords] = useState([]);
+
 	useEffect(() => {
-		console.log("getGradebook.js 2 | data", data);
-		if (data) {
-			console.log("***********************************", data);
-			setRecords(data.gradebooks);
+		if (res1.data) {
+			setRecords(res1.gradebook);
 		}
-		if (error) {
-			console.log(error);
+		if (res1.error) {
+			console.log(res1.error);
 		}
-	}, [data]);
+	}, [res1]);
+
+	useEffect(() => {
+		if (res2.data) {
+			setRecords(res2.data.gradebooks);
+		}
+		if (res2.error) {
+			console.log(res2.error);
+		}
+	}, [res2]);
 
 	// if (records.length === 0) {
 	// 	return (

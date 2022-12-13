@@ -109,14 +109,14 @@ async function getSubjects(db, keys) {
 
 //GET GRADEBOOK
 async function getGradebook(db, keys) {
-  // keys = keys.map((key) => ObjectId(key));
   let gradebook = await db
     .collection("gradebook")
     .find({ emailid: { $in: keys } })
     .toArray();
-    //console.loggradebook)
+    let formatted_gradebook = [[formatGradebook(gradebook)]].flat()
+    console.log(formatted_gradebook)
   return (
-    formatGradebook(gradebook) ||
+     formatted_gradebook ||
     new Error((message = `gradebook collection does not exist `))
   );
 }
@@ -201,7 +201,7 @@ const resolvers = {
       let res = await context.db.collection("subject").updateOne(
         { _id: ObjectId(id) },
         {
-          $set:   updated_dict
+          $set: updated_dict
         }
       )
       context.loaders.subject.clear(id);
@@ -217,7 +217,7 @@ const resolvers = {
 
       };
       let res = await context.db.collection("gradebook").insertOne(gradebook);
-      return context.loaders.gradebooks.load(gradebookInput.emailid);
+      return [context.loaders.gradebooks.load(gradebookInput.emailid)].flat();
     },
 
     gradebookDelete: async (_, { id }, context) => {
@@ -313,8 +313,8 @@ const resolvers = {
       return students.slice(offset, offset + limit).map(formatPerson);
     },
 
-    subject: (_, { id }, context) => {
-      return context.loaders.subject.load(id);
+    subject: (_, { emailid }, context) => {
+      return [context.loaders.subject.load(emailid)].flat();
     },
 
     subjects: async (_, { limit = 20, offset = 0, sort = null }, context) => {
@@ -335,7 +335,7 @@ const resolvers = {
     },
 
     gradebook: (_, { emailid }, context) => {
-      return context.loaders.gradebook.load(emailid);
+      return context.loaders.gradebooks.load(emailid);
     },
 
     gradebooks: async (_, { limit = 20, offset = 0, sort = null }, context) => {
@@ -407,7 +407,7 @@ function formatGradebook(gradebook) {
     grade: gradebook.grade,
     gpa: gradebook.gpa,
     emailid:gradebook.emailid
-  };
+  };  
   return res;
 }
 
