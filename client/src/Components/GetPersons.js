@@ -20,77 +20,62 @@ import Table from '@mui/material/Table';
 
 
 
+
 function GetPersons({emailid}) {
 
 
-    const {error,loading,data} = useQuery(LOAD_STUDENT,{ variables: { emailid } }); 
-    const [records,setRecords] = useState([]);
 
-    const errorLink = onError(({ graphqlErrors, networkError }) => {
-      if (graphqlErrors) {
-        graphqlErrors.map(({ message, location, path }) => {
-          alert(`Graphql error ${message}`)
-        });
-      }
-    });
-  
-    const link = from([
-      errorLink,
-      new HttpLink({ uri: "http://localhost:8080/graphql" })
-    ])
-  
-  
-    const client = new ApolloClient({
-      cache: new InMemoryCache(),
-      link: link,
-    });
-    
-    
+    const {error,loading,data} = useQuery(LOAD_STUDENT,{ variables: { emailid } }); 
+    const [records,setRecords] = useState({});
+
+
+      
     useEffect(() => {
-        console.log("GetPersons.js 2 | data", data);
         if (data) {
-          console.log("********************************************",data.student);      
-            setRecords(records,data.student);
-            //Add role here and make view changeable
+            setRecords(data.student);
+
 
         }
         if (error) {
             console.log(error);
         }
 
+
     }, [data])
 
-  return (
-    // records.map(e => {
-    //   const dt = new Date(e.start.dateTime).toDateString() + ' ' + new Date(e.start.dateTime).toLocaleTimeString();
-    //   return (
-    //     <>
-          {/* <Card style={{ marginBottom: '5px', marginTop: '5px'}}>
-            <CardContent style={{ padding: 'unset'}}>
-              <ListItem alignItems="flex-start">
-                <ListItemText
-                  primary={e.summary}
-                  secondary={
-                    <React.Fragment>
-                      <Typography
-                        sx={{ display: 'inline' }}
-                        component="h1"
-                        variant="caption"
-                        color="text.primary"
-                      >
-                        {dt}
-                      </Typography>
-                      {` — ${e.summary}`}
-                    </React.Fragment>
-                  }
-                />
 
-              </ListItem>
-            </CardContent>
-          </Card>
-          <Divider variant="inset" component="li" style={{ margin: 'unset' }} /> */}
-        // </>
+
+  if (records.length === 0){
+    return (
+      <div>
+        <h3>No records found</h3>
+      </div>
+    )
+  }
+  return (
+    
+      <Table  aria-label="simple table">
+        <TableHead>
+          <TableRow>
+            <TableCell align="auto">Name</TableCell>
+            {/* <TableCell align="auto">Email</TableCell> */}
+            <TableCell align="auto">GPA</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+        <TableRow
+              key={records.name}
+              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}  
+            >
+              <TableCell align="auto">{records.name}</TableCell>
+              {/* <TableCell align="auto">{records.email}</TableCell> */}
+              <TableCell align="auto">{records.gpa}</TableCell>
+            </TableRow>
+
+        </TableBody>
+      </Table>
       )
     }
+
 
 export default GetPersons;

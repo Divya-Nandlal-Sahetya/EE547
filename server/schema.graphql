@@ -7,7 +7,7 @@ type Query {
 
   students(limit: Int, offset: Int, sort: String): [Person]!
 
-  grade(emailid: String!): gradebook
+  gradebook(emailid: String!): [gradebook]
 }
 
 type Mutation {
@@ -27,11 +27,11 @@ enum roleEnum {
 }
 
 input personCreateInput {
-  fname: String!
+  fname: String
   lname: String
   role: roleEnum
   gpa: Float
-  emailid: String
+  emailid: String!
 }
 
 input personUpdateInput {
@@ -57,13 +57,15 @@ input gradebookCreateInput {
   subject: String
   grade: String
   gpa: Float
-  student_id: ID
+  emailid: String!
 }
 
 input gradebookUpdateInput {
+  id: ID!
   subject: String
   grade: String
   gpa: Float
+  emailid: String
 }
 
 type gradebook {

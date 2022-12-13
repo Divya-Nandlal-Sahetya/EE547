@@ -107,10 +107,10 @@ async function getSubjects(db, keys) {
 
 //GET GRADEBOOK
 async function getGradebook(db, keys) {
-  keys = keys.map((key) => ObjectId(key));
+  // keys = keys.map((key) => ObjectId(key));
   let gradebook = await db
     .collection("gradebook")
-    .find({ _id: { $in: keys } })
+    .find({ emailid: { $in: keys } })
     .toArray();
   return (
     formatGradebook(gradebook) ||
@@ -207,7 +207,7 @@ const resolvers = {
     gradebookCreate: async (_, { gradebookInput }, context) => {
       let gradebook = {
         student_id: ObjectId(gradebookInput.student_id),
-        subject_code: gradebookInput.subject_code,
+        subject: gradebookInput.subject,
         grade: gradebookInput.grade,
         gpa: gradebookInput.gpa,
 
@@ -400,8 +400,7 @@ function formatGradebook(gradebook) {
 
   let res = {
     id: gradebook._id,
-    student_id: gradebook.student_id,
-    subject_code: gradebook.subject_code,
+    subject: gradebook.subject,
     grade: gradebook.grade,
     gpa: gradebook.gpa,
   };

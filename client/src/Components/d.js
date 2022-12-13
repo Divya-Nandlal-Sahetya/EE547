@@ -216,9 +216,9 @@ export default function DashboardContent({
                                         height: 240,
                                     }}
                                 >
-       {/* <ApolloProvider client={client}>
+       <ApolloProvider client={client}>
           <GetPersons emailid={emailid}/>
-        </ApolloProvider> */}
+        </ApolloProvider>
      
                                 </Paper>
                             </Grid>
