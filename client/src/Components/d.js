@@ -29,7 +29,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import SendMail from "./sendMail";
 import { ShowEmailList } from "./showEmailList";
 import GetPersons from "./GetPersons";
-import GetGradebook from "./GetGradebook"
+import GetGradebook from "./GetGradebook";
 import {
 	ApolloClient,
 	InMemoryCache,
@@ -54,6 +54,8 @@ function Copyright(props) {
 		</Typography>
 	);
 }
+
+
 
 const drawerWidth = 240;
 
@@ -117,7 +119,9 @@ export default function DashboardContent({
 }) {
 	const [open, setOpen] = React.useState(true);
 
-	const [isTeacher, setIsTeacher] = React.useState(() => sessionStorage.getItem("isTeacher"));
+	const [isTeacher, setIsTeacher] = React.useState(() =>
+		sessionStorage.getItem("isTeacher")
+	);
 
 	const toggleDrawer = () => {
 		setOpen(!open);
@@ -229,13 +233,13 @@ export default function DashboardContent({
 											p: 2,
 											display: "flex",
 											flexDirection: "column",
-											height: '50%',
+											height: "50%",
 											// overflow: 'scroll'
 										}}
 									>
 										<ApolloProvider client={client}>
-											<GetPersons emailid={emailid} isTeacher={isTeacher} />
-                      <GetGradebook emailid={emailid} isTeacher={isTeacher}/>
+											{/* <GetPersons emailid={emailid} isTeacher={isTeacher} /> */}
+											<GetGradebook emailid={emailid} isTeacher={isTeacher} />
 										</ApolloProvider>
 									</Paper>
 								</Grid>
@@ -285,9 +289,9 @@ export default function DashboardContent({
 									<FormControlLabel
 										control={<Switch defaultChecked={false} color="warning" />}
 										onChange={(event) => {
-                      setIsTeacher(event.target.checked)
-                      sessionStorage.setItem("isTeacher", event.target.checked);
-                    }}
+											setIsTeacher(event.target.checked);
+											sessionStorage.setItem("isTeacher", event.target.checked);
+										}}
 										label={isTeacher ? "Teacher" : "Student"}
 									/>
 								</FormGroup>
