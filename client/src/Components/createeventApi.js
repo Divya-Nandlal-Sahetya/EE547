@@ -134,6 +134,10 @@ export function CreateEvent({isLoggedIn, setEventChanged}) {
             width: '500px',
             
         },
+        '.MuiInputBase-input' :{
+            height: '2.1rem',
+            // padding: 'unset',
+        },
         '&.MuiOutlinedInput-root' : {
             height: '50px',
         },
