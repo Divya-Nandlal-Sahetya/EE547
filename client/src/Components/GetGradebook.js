@@ -10,7 +10,6 @@ import Table from "@mui/material/Table";
 import TableContainer from "@mui/material/TableContainer";
 import { Button, Card, CardContent } from "@mui/material";
 import Form from "./Form";
-import Popup from "reactjs-popup";
 
 function GetGradebook({ emailid }) {
 	// Popup state vars
@@ -46,15 +45,15 @@ function GetGradebook({ emailid }) {
 		}
 	}, [res2]);
 
-	// if (records.length === 0) {
-	// 	return (
-	// 		<div>
-	// 			<h3>No records found</h3>
-	// 		</div>
-	// 	);
-	// }
+	if (records.length === 0) {
+		return (
+			<div>
+				<h3>No records found</h3>
+			</div>
+		);
+	}
 
-	if (isTeacher == true) {
+	if (isTeacher==true) {
 		return (
 			<>
 				{true ? (
@@ -67,17 +66,6 @@ function GetGradebook({ emailid }) {
 							Add Record
 						</Button>
 						<Form setOpen={setOpen} open={open} closeModal={closeModal} />
-						{/* <Popup
-						open={open}
-						closeOnDocumentClick
-						onClose={closeModal}
-						position="bottom left"
-					>
-						<a className="close" onClick={closeModal}>
-							&times;
-						</a>
-						<Form setOpen={setOpen} open={open} closeModal={closeModal}/>
-					</Popup> */}
 					</>
 				) : (
 					<></>
