@@ -25,8 +25,6 @@ function GetGradebook({ emailid }) {
 	const res2 = useQuery(LOAD_GRADEBOOKS);
 
 	const [records, setRecords] = useState([]);
-	console.log("*", res1, res2);
-
 	useEffect(() => {
 		if (res1.data) {
 			setRecords(res1.data.gradebook);
@@ -53,7 +51,7 @@ function GetGradebook({ emailid }) {
 		);
 	}
 
-	if (isTeacher==true) {
+	if (isTeacher === "true") {
 		return (
 			<>
 				{true ? (

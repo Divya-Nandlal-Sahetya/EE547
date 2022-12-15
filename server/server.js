@@ -16,8 +16,8 @@ let mongo_file_path = process.env.MONGO_CONFIG;
 const config = require(mongo_file_path);
 
 (async function () {
-  host = config.host || "localhost";
-  port = config.port || 27017;
+  host = config.host || "cluster0.bqou7vl.mongodb.net";
+  port = config.port;
   opts = config.opts || { useUnifiedTopology: true };
   const connection = new MongoClient(
     "mongodb+srv://admin1:admin1@" + host,
@@ -118,7 +118,7 @@ async function getGradebook(db, keys) {
     .find({ emailid: { $in: keys } })
     .toArray();
   let formatted_gradebook = [[formatGradebook(gradebook)]].flat();
-  console.log(formatted_gradebook);
+  // console.log(formatted_gradebook);
   return (
     formatted_gradebook ||
     new Error((message = `gradebook collection does not exist `))
@@ -457,8 +457,7 @@ const { google } = require("googleapis");
 const oauth2Client = new google.auth.OAuth2(
   process.env.GOOGLE_CLIENT_ID,
   process.env.GOOGLE_CLIENT_SECRET,
-  "https://basic-bank-370504.uw.r.appspot.com/handleGoogleRedirect" // server redirect url handler
-  // "https://basic-bank-370504.uw.r.appspot.comhandleGoogleRedirect"
+  "https://backendee547.uw.r.appspot.com/handleGoogleRedirect" // server redirect url handler
 );
 
 app.post("/createAuthLink", cors(), (req, res) => {
@@ -493,7 +492,7 @@ app.get("/handleGoogleRedirect", async (req, res) => {
     const accessToken = tokens.access_token;
     const refreshToken = tokens.refresh_token;
     res.redirect(
-      `https://useful-mile-371121.uw.r.appspot.com/?accessToken=${accessToken}&refreshToken=${refreshToken}`
+      `https://clientee547.uw.r.appspot.com/?accessToken=${accessToken}&refreshToken=${refreshToken}`
     );
   });
 });

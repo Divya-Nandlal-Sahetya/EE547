@@ -19,12 +19,12 @@ const { google } = require("googleapis");
 const oauth2Client = new google.auth.OAuth2(
   process.env.GOOGLE_CLIENT_ID,
   process.env.GOOGLE_CLIENT_SECRET,
-  // "https://basic-bank-370504.uw.r.appspot.com//handleGoogleRedirect" // server redirect url handler
-  "https://basic-bank-370504.uw.r.appspot.com/handleGoogleRedirect"
+  // "https://backendee547.uw.r.appspot.com//handleGoogleRedirect" // server redirect url handler
+  "https://backendee547.uw.r.appspot.com/handleGoogleRedirect"
 );
 
 app.post(
-  "https://basic-bank-370504.uw.r.appspot.com/createAuthLink",
+  "https://backendee547.uw.r.appspot.com/createAuthLink",
   cors(),
   (req, res) => {
     const url = oauth2Client.generateAuthUrl({
